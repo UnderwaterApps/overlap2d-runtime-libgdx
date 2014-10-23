@@ -20,14 +20,6 @@ dependencies {
     
 }
 
-project(":spine-runtime-libgdx") {
-    apply plugin: "java"
-    sourceSets.main.java.srcDirs = [ "src/" ]
-    dependencies {
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
-    }
-}
-
 repositories {
     mavenLocal()
     mavenCentral()

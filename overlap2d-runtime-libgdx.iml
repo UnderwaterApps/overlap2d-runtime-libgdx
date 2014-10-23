@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$/../overlap2d" external.system.id="GRADLE" external.system.module.group="overlap2d" external.system.module.version="0.0.5" type="JAVA_MODULE" version="4">
+<module external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$/../clickers" external.system.id="GRADLE" external.system.module.group="clickers" external.system.module.version="1.0" type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="java-gradle" name="Java-Gradle">
+      <configuration>
+        <option name="BUILD_FOLDER_PATH" value="$MODULE_DIR$/build" />
+      </configuration>
+    </facet>
+  </component>
   <component name="NewModuleRootManager" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/build/classes/main" />
     <output-test url="file://$MODULE_DIR$/build/classes/test" />
@@ -10,17 +17,16 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
       <excludeFolder url="file://$MODULE_DIR$/.gradle" />
-      <excludeFolder url="file://$MODULE_DIR$/build" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="1.7" jdkType="JavaSDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="Gradle: box2dlights-1.2" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: gdx-1.2.0" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: gdx-box2d-1.2.0" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: reflectasm-1.10.0" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: gdx-freetype-1.2.0" level="project" />
-    <orderEntry type="library" exported="" name="Gradle: asm-4.2" level="project" />
     <orderEntry type="module" module-name="spine-runtime-libgdx" exported="" />
+    <orderEntry type="library" exported="" name="gdx-box2d-1.2.0" level="project" />
+    <orderEntry type="library" exported="" name="box2dlights-1.2" level="project" />
+    <orderEntry type="library" exported="" name="reflectasm-1.10.0" level="project" />
+    <orderEntry type="library" exported="" name="gdx-freetype-1.2.0" level="project" />
+    <orderEntry type="library" exported="" name="asm-4.2" level="project" />
+    <orderEntry type="library" exported="" name="gdx-1.4.1" level="project" />
   </component>
 </module>
 
