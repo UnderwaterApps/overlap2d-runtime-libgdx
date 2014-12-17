@@ -26,6 +26,6 @@
     <orderEntry type="library" exported="" name="reflectasm-1.10.0" level="project" />
     <orderEntry type="library" exported="" name="gdx-freetype-1.2.0" level="project" />
     <orderEntry type="library" exported="" name="asm-4.2" level="project" />
-    <orderEntry type="library" exported="" name="gdx-1.4.1" level="project" />
+    <orderEntry type="library" exported="" name="gdx-1.5.0" level="project" />
   </component>
 </module>
