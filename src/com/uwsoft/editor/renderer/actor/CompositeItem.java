@@ -36,6 +36,7 @@ import com.uwsoft.editor.renderer.data.SelectBoxVO;
 import com.uwsoft.editor.renderer.data.SimpleImageVO;
 import com.uwsoft.editor.renderer.data.SpineVO;
 import com.uwsoft.editor.renderer.data.SpriteAnimationVO;
+import com.uwsoft.editor.renderer.data.SpriterVO;
 import com.uwsoft.editor.renderer.data.TextBoxVO;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.script.IScript;
@@ -370,6 +371,14 @@ public class CompositeItem extends Group implements IBaseItem {
             addActor(itm);
             itm.setZIndex(itm.dataVO.zIndex);
         }
+        
+        for (int i = 0; i < dataVO.composite.sSpriterAnimations.size(); i++) {
+        	SpriterVO tmpVo = dataVO.composite.sSpriterAnimations.get(i);
+        	SpriterActor itm = new SpriterActor(tmpVo, essentials, this);
+        	inventorize(itm);
+        	addActor(itm);
+        	itm.setZIndex(itm.dataVO.zIndex);
+        }
 
         if (dataVO.composite.layers.size() == 0) {
             LayerItemVO layerVO = new LayerItemVO();
@@ -478,6 +487,9 @@ public class CompositeItem extends Group implements IBaseItem {
     public SpriteAnimation getSpriteAnimationById(String itemId) {
         return (SpriteAnimation) itemIdMap.get(itemId);
     }
+    public SpriterActor getSpriterActorById(String itemId) {
+    	return (SpriterActor) itemIdMap.get(itemId);
+    }
 
     public SpineActor getSpineActorById(String itemId) {
         return (SpineActor) itemIdMap.get(itemId);
@@ -506,7 +518,7 @@ public class CompositeItem extends Group implements IBaseItem {
         reAssembleLayers();
 
         //apply physics
-        if(item.getDataVO().physicsBodyData != null && item.getDataVO().meshId >= 0) {
+        if(item.getDataVO().physicsBodyData != null && Integer.parseInt(item.getDataVO().meshId) >= 0) {
         	Vector2 toStageVec = new Vector2();
     		toStageVec.set(item.getDataVO().x * this.mulX, item.getDataVO().y * this.mulY);
             localToStageCoordinates(toStageVec);
@@ -571,8 +583,11 @@ public class CompositeItem extends Group implements IBaseItem {
             MainItemVO itemVO = item.getDataVO();
             PhysicsBodyDataVO bodyData = itemVO.physicsBodyData;
 
-            if( itemVO.meshId < 0 || bodyData == null) continue;
-            
+            if( Integer.parseInt(itemVO.meshId) < 0 || bodyData == null) continue;
+
+            if( essentials.rm.getProjectVO().meshes.get(itemVO.meshId) == null) {
+                continue;
+            }
             item.setBody(PhysicsBodyLoader.createBody(essentials.world, bodyData, essentials.rm.getProjectVO().meshes.get(itemVO.meshId), mulVec));
             item.getBody().setUserData(item);
         }
