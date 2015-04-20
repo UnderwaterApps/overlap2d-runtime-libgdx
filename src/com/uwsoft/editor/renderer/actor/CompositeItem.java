@@ -698,6 +698,13 @@ public class CompositeItem extends Group implements IBaseItem {
      */
     public void removeItem(IBaseItem item) {
         items.remove(item);
+        
+        // Removes the item from the itemLayerMap
+        ArrayList<IBaseItem> itemLayer = itemLayerMap.get(item.getDataVO().layerName);
+        if(itemLayer != null) {
+        	itemLayer.remove(item);
+        }
+        
         dataVO.composite.removeItem(item.getDataVO());
         item.dispose();
     }

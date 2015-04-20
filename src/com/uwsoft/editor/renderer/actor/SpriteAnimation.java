@@ -98,13 +98,22 @@ public class SpriteAnimation extends Actor implements IBaseItem {
         setWidth(frameWidth);
         setHeight(frameHeight);
 
-        framesCount = regions.size;
-        for (int i = 0; i < regions.size; i++) {
-            String regName = regions.get(i).name;
-
-            animationAtlasRegions[regNameToFrame(regName) - 1] = regions.get(i);
+        Array<Integer> regionNumbers = new Array<Integer>();
+        int lowerRegionNumber = regNameToFrame(regions.get(0).name);
+        for(int i=0;i<regions.size; i++){
+        	int currentRegionNumber = regNameToFrame(regions.get(i).name);
+        	if(currentRegionNumber<lowerRegionNumber){
+        		lowerRegionNumber = currentRegionNumber;
+        	}
+        	
+        	regionNumbers.add(currentRegionNumber);
         }
 
+        framesCount = regions.size;
+        for(int i=0; i<regions.size; i++){
+        	animationAtlasRegions[regionNumbers.get(i)-lowerRegionNumber] = regions.get(i);
+        }
+        
         setAnimation(dataVO.fps, true);
     }
 
