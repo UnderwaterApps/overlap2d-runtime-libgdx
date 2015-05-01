@@ -100,7 +100,7 @@ public class SpineActor extends Actor implements IBaseItem {
     }
 
     private void initSpine() {
-        BoneData root = skeletonData.findBone("root");
+        BoneData root = skeletonData.getBones().get(0); // this has to be the root bone.
         root.setScale(dataVO.scaleX * mulX, dataVO.scaleX * mulX);
         skeleton = new Skeleton(skeletonData); // Skeleton holds skeleton state (bone positions, slot attachments, etc).
         AnimationStateData stateData = new AnimationStateData(skeletonData); // Defines mixing (crossfading) between animations.
