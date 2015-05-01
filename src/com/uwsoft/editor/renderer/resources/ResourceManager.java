@@ -111,10 +111,56 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
     public void unLoadScene(String sceneName) {
         unScheduleScene(sceneName);
         loadedSceneVOs.remove(sceneName);
-        loadAssets();
+        unLoadAssets();   
     }
 
-    /**
+    public void unLoadAssets() {
+    	unLoadAtlasPack();
+    	unLoadParticleEffects();
+    	unLoadSpineAnimations();
+    	unLoadSpriteAnimations();
+    	unLoadSpriterAnimations();
+        unLoadFonts();
+	}
+
+	private void unLoadFonts() {
+		for(BitmapFont font:bitmapFonts.values()) {
+			font.dispose();
+		}
+		bitmapFonts.clear();
+	}
+
+	private void unLoadSpriterAnimations() {
+		spriterAnimations.clear();
+	}
+
+	private void unLoadSpriteAnimations() {
+		for(TextureAtlas texture:spriteAnimations.values()) {
+			texture.dispose();
+		}
+		spriteAnimations.clear();
+	}
+
+	public void unLoadSpineAnimations() {
+		for(TextureAtlas texture:skeletonAtlases.values()) {
+			texture.dispose();
+		}
+		skeletonAtlases.clear();
+		skeletonJSON.clear();
+	}
+
+	public void unLoadParticleEffects() {
+	    for(ParticleEffect particle:particleEffects.values()) {
+	    	particle.dispose();
+	    }
+	    particleEffects.clear();
+	}
+
+	public void unLoadAtlasPack() {
+		mainPack.dispose();
+	}
+
+	/**
      * Schedules scene for later loading
      * if later prepareAssetsToLoad function will be called it will only prepare assets that are used in scheduled scene
      *
@@ -200,17 +246,21 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
         if (!packFile.exists()) {
             return;
         }
-        mainPack = new TextureAtlas(packFile);
+        	mainPack = new TextureAtlas(packFile);
+
     }
 
     @Override
     public void loadParticleEffects() {
         // empty existing ones that are not scheduled to load
-        for (String key : particleEffects.keySet()) {
-            if (!particleEffectNamesToLoad.contains(key)) {
-                particleEffects.remove(key);
-            }
-        }
+    	 Iterator<Map.Entry<String,ParticleEffect>> it = particleEffects.entrySet().iterator();
+    	    while (it.hasNext()) {
+    	    	Map.Entry<String,ParticleEffect> pair = it.next();
+    	        if (!particleEffectNamesToLoad.contains(pair.getKey())) {
+    	        	pair.getValue().dispose();
+    	        	it.remove();
+              }    	         
+    	    }
 
         // load scheduled
         for (String name : particleEffectNamesToLoad) {
@@ -223,11 +273,14 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
     @Override
     public void loadSpriteAnimations() {
         // empty existing ones that are not scheduled to load
-        for (String key : spriteAnimations.keySet()) {
-            if (!spriteAnimNamesToLoad.contains(key)) {
-                spriteAnimations.remove(key);
-            }
-        }
+    	Iterator<Map.Entry<String,TextureAtlas>> it = spriteAnimations.entrySet().iterator();
+	    while (it.hasNext()) {
+	    	Map.Entry<String,TextureAtlas> pair = it.next();
+	        if (!spriteAnimNamesToLoad.contains(pair.getKey())) {
+	        	pair.getValue().dispose();
+	        	it.remove();
+          }    	         
+	    }
 
         for (String name : spriteAnimNamesToLoad) {
             TextureAtlas animAtlas = new TextureAtlas(Gdx.files.internal(packResolutionName + File.separator + spriteAnimationsPath + File.separator + name + File.separator + name + ".atlas"));
@@ -237,11 +290,14 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
     @Override
     public void loadSpriterAnimations() {
     	// empty existing ones that are not scheduled to load
-    	for (String key : spriterAnimations.keySet()) {
-    		if (!spriterAnimNamesToLoad.contains(key)) {
-    			spriterAnimations.remove(key);
-    		}
-    	}
+    	Iterator<Map.Entry<String,FileHandle>> it = spriterAnimations.entrySet().iterator();
+	    while (it.hasNext()) {
+	    	Map.Entry<String,FileHandle> pair = it.next();
+	        if (!spriterAnimNamesToLoad.contains(pair.getKey())) {
+	        	it.remove();
+          }    	         
+	    }
+    	
     	for (String name : spriterAnimNamesToLoad) {
     		FileHandle animFile = Gdx.files.internal("orig" + File.separator + spriterAnimationsPath + File.separator + name + File.separator + name + ".scml");
     		spriterAnimations.put(name, animFile);
@@ -266,6 +322,7 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
                 spineAnimNamesToLoad.remove(pairs.getKey());
             } else {
                 it.remove();
+                ((TextureAtlas) pairs.getValue()).dispose();
                 skeletonJSON.remove(pairs.getKey());
             }
         }
@@ -290,11 +347,14 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
     	}
     	
         // empty existing ones that are not scheduled to load
-        for (FontSizePair pair : bitmapFonts.keySet()) {
-            if (!fontsToLoad.contains(pair)) {
-                bitmapFonts.remove(pair);
-            }
-        }
+    	Iterator<Map.Entry<FontSizePair, BitmapFont>> it = bitmapFonts.entrySet().iterator();
+	    while (it.hasNext()) {
+	    	Map.Entry<FontSizePair, BitmapFont> pair = it.next();
+	        if (!fontsToLoad.contains(pair.getKey())) {
+	        	pair.getValue().dispose();
+	        	it.remove();
+          }    	         
+	    }
 
         for (FontSizePair pair : fontsToLoad) {
             loadFont(pair);
