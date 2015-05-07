@@ -4,6 +4,7 @@ package com.uwsoft.editor.renderer;
 import box2dLight.RayHandler;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -43,7 +44,12 @@ public class Overlap2DStage extends Stage {
 		initStage();
 	}
 
-    /**
+    public Overlap2DStage(Viewport viewPort, Batch batch) {
+    	super(viewPort, batch);
+		initStage();
+	}
+
+	/**
      * initializes empty holders for future data like essentials
      * to hold RayHandler for lights, and skeletonRenderer for spine animations
      */
