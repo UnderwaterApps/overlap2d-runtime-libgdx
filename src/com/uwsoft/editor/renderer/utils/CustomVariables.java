@@ -1,14 +1,14 @@
 package com.uwsoft.editor.renderer.utils;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.badlogic.gdx.utils.ArrayMap;
+
 
 /**
  * Created by azakhary on 8/28/2014.
  */
 public class CustomVariables {
-
-    private HashMap<String, String> variables = new HashMap<String, String>();
+    private static final StringBuilder string = new StringBuilder();
+    private ArrayMap<String, String> variables = new ArrayMap<String, String>();
 
     public CustomVariables() {
 
@@ -26,17 +26,17 @@ public class CustomVariables {
     }
 
     public String saveAsString() {
-        String result = "";
-        for (Map.Entry<String, String> entry : variables.entrySet()) {
-            String key = entry.getKey();
-            String value = entry.getValue();
-            result += key + ":" + value + ";";
+        string.setLength(0);
+        for (int i = 0; i < variables.size; i++) {
+            String key = variables.getKeyAt(i);
+            String value = variables.getValueAt(i);
+            string.append(key).append(':').append(value).append(';');
         }
-        if(result.length() > 0) {
-            result = result.substring(0, result.length()-1);
+        if(string.length() > 0) {
+            string.setLength(string.length()-1);
         }
 
-        return result;
+        return string.toString();
     }
 
     public void setVariable(String key, String value) {
@@ -44,7 +44,7 @@ public class CustomVariables {
     }
 
     public void removeVariable(String key) {
-        variables.remove(key);
+        variables.removeKey(key);
     }
 
     public String getStringVariable(String key) {
@@ -69,12 +69,12 @@ public class CustomVariables {
         return result;
     }
 
-    public HashMap<String, String> getHashMap() {
+    public ArrayMap<String, String> getHashMap() {
         return variables;
     }
 
     public int getCount() {
-        return variables.size();
+        return variables.size;
     }
 
 }

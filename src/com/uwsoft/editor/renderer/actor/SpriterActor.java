@@ -1,8 +1,6 @@
 package com.uwsoft.editor.renderer.actor;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -254,8 +252,7 @@ public class SpriterActor extends Actor implements IBaseItem {
 
 	public void setAnimation(int i) {
 		currentAnimationIndex	=	i;
-	 	updateDataVO();
-		initPlayer();
+        player.setAnimation(i);
 	}
 	public void setEntity(int i) {
 		currentEntityIndex	=	i;	

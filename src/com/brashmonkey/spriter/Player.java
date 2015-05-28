@@ -1,9 +1,8 @@
 package com.brashmonkey.spriter;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ArrayMap;
 
 import com.brashmonkey.spriter.Entity.CharacterMap;
 import com.brashmonkey.spriter.Entity.ObjectInfo;
@@ -33,11 +32,11 @@ public class Player {
 	public int speed;
 	Timeline.Key[] tweenedKeys, unmappedTweenedKeys;
 	private Timeline.Key[] tempTweenedKeys, tempUnmappedTweenedKeys;
-	private List<PlayerListener> listeners;
-	public final List<Attachment> attachments = new ArrayList<Attachment>();
+	private Array<PlayerListener> listeners;
+	public final Array<Attachment> attachments = new Array<Attachment>();
 	Timeline.Key.Bone root = new Timeline.Key.Bone(new Point(0,0));
 	private final Point position = new Point(0,0), pivot = new Point(0,0);
-	private final HashMap<Object, Timeline.Key> objToTimeline = new HashMap<Object, Timeline.Key>();
+	private final ArrayMap<Bone, Timeline.Key> objToTimeline = new ArrayMap<Bone, Timeline.Key>();
 	private float angle;
 	private boolean dirty = true;
 	public CharacterMap[] characterMaps;
@@ -58,7 +57,7 @@ public class Player {
 		this.speed = 15;
 		this.rect = new Rectangle(0,0,0,0);
 		this.prevBBox = new Box();
-		this.listeners = new ArrayList<PlayerListener>();
+		this.listeners = new Array<PlayerListener>();
 		this.setEntity(entity);
 	}
 	
@@ -926,7 +925,7 @@ public class Player {
 	 * @param listener the listener to remove
 	 */
 	public void removeListener(PlayerListener listener){
-		this.listeners.remove(listener);
+		this.listeners.removeValue(listener,false);
 	}
 	
 	/**
