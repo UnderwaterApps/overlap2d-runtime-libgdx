@@ -252,7 +252,7 @@ public class SpriterActor extends Actor implements IBaseItem {
 
 	public void setAnimation(int i) {
 		currentAnimationIndex	=	i;
-        player.setAnimation(i);
+        	player.setAnimation(i);
 	}
 	public void setEntity(int i) {
 		currentEntityIndex	=	i;	
