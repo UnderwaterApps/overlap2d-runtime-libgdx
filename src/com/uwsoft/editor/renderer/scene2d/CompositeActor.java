@@ -314,9 +314,9 @@ public class CompositeActor extends Group {
         }
         return items;
     }
-
-    public void setScripts(ArrayList<IActorScript> scripts) {
-        this.scripts = scripts;
+    
+    public ArrayList<IActorScript> getScripts() {
+        return scripts;
     }
 
     public CompositeItemVO getVo() {
