@@ -23,7 +23,8 @@ import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 public class Overlap2dRenderer extends IteratingSystem {
 	private final float TIME_STEP = 1f/60;
-	
+	private final boolean drawOnly;
+
 	private ComponentMapper<ViewPortComponent> viewPortMapper = ComponentMapper.getFor(ViewPortComponent.class);
 	private ComponentMapper<CompositeTransformComponent> compositeTransformMapper = ComponentMapper.getFor(CompositeTransformComponent.class);
 	private ComponentMapper<NodeComponent> nodeMapper = ComponentMapper.getFor(NodeComponent.class);
@@ -44,9 +45,14 @@ public class Overlap2dRenderer extends IteratingSystem {
 	public Batch batch;
 
 	public Overlap2dRenderer(Batch batch) {
+	this(batch, false);
+	}
+
+	public Overlap2dRenderer(Batch batch, boolean drawOnly) {
 		super(Family.all(ViewPortComponent.class).get());
 		this.batch = batch;
 		drawableLogicMapper = new DrawableLogicMapper();
+		this.drawOnly = drawOnly;
 	}
 
 	public void addDrawableType(IExternalItemType itemType) {
@@ -59,25 +65,27 @@ public class Overlap2dRenderer extends IteratingSystem {
 
 		ViewPortComponent ViewPortComponent = viewPortMapper.get(entity);
 		Camera camera = ViewPortComponent.viewPort.getCamera();
-		camera.update();
+		// camera.update();
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		drawRecursively(entity, 1f);
 		batch.end();
 
-		
-		//TODO kinda not cool (this should be done in separate lights renderer maybe?
-		if(rayHandler != null) {
-			rayHandler.setCulling(false);
-			OrthographicCamera orthoCamera = (OrthographicCamera) camera;
-			camera.combined.scl(1f/PhysicsBodyLoader.getScale());
-			rayHandler.setCombinedMatrix(orthoCamera); 
-			rayHandler.updateAndRender();
+
+		if (!drawOnly) {
+			//TODO kinda not cool (this should be done in separate lights renderer maybe?
+			if (rayHandler != null) {
+				rayHandler.setCulling(false);
+				OrthographicCamera orthoCamera = (OrthographicCamera) camera;
+				camera.combined.scl(1f / PhysicsBodyLoader.getScale());
+				rayHandler.setCombinedMatrix(orthoCamera);
+				rayHandler.updateAndRender();
+			}
+
+			if (world != null && isPhysicsOn) {
+				doPhysicsStep(deltaTime);
+			}
 		}
-		
-		if(world != null && isPhysicsOn) {
-			doPhysicsStep(deltaTime);
-        }
 
 		//debugRenderer.render(world, camera.combined);
 		//TODO Spine rendere thing

@@ -58,7 +58,9 @@ public class SceneLoader {
 	private Overlap2dRenderer renderer;
 	private Entity root;
 
-	public SceneLoader() {
+	public SceneLoader(World world, RayHandler rayHandler) {
+        this.world = world;
+        this.rayHandler = rayHandler;
 		ResourceManager rm = new ResourceManager();
         rm.initAllResources();
 
@@ -68,28 +70,45 @@ public class SceneLoader {
 		initSceneLoader();
     }
 
-    public SceneLoader(IResourceRetriever rm) {
+    public SceneLoader(IResourceRetriever rm, World world, RayHandler rayHandler) {
+		this.world = world;
+        this.rayHandler = rayHandler;
         this.engine = new Engine();
 		this.rm = rm;
 		initSceneLoader();
     }
 
+	public SceneLoader() {
+	this(null, null);
+	}
+
+	public SceneLoader(IResourceRetriever rm) {
+	this(rm, null, null);
+	}
+
 	/**
 	 * this method is called when rm has loaded all data
 	 */
     private void initSceneLoader() {
-        RayHandler.setGammaCorrection(true);
-        RayHandler.useDiffuseLight(true);
-        world = new World(new Vector2(0,-10), true);
-        rayHandler = new RayHandler(world);
-        rayHandler.setAmbientLight(1f, 1f, 1f, 1f);
-        rayHandler.setCulling(true);
-        rayHandler.setBlur(true);
-        rayHandler.setBlurNum(3);
-        rayHandler.setShadows(true);
+        if (world == null) {
+            world = new World(new Vector2(0,-10), true);
+        } else {
+            PhysicsBodyLoader.getInstance().mul = 1;
+        }
+
+        if (rayHandler == null) {
+            RayHandler.setGammaCorrection(true);
+            RayHandler.useDiffuseLight(true);
+
+            rayHandler = new RayHandler(world);
+            rayHandler.setAmbientLight(1f, 1f, 1f, 1f);
+            rayHandler.setCulling(true);
+            rayHandler.setBlur(true);
+            rayHandler.setBlurNum(3);
+            rayHandler.setShadows(true);
+        }
         
         addSystems();
-
         entityFactory = new EntityFactory(rayHandler, world, rm);
     }
 
@@ -105,7 +124,7 @@ public class SceneLoader {
 		return sceneVO;
 	}
 
-	public SceneVO loadScene(String sceneName, Viewport viewport) {
+	public SceneVO loadScene(String sceneName, Viewport viewport, boolean customGravity, boolean customLight) {
 
 		// this has to be done differently.
 		engine.removeAllEntities();
@@ -114,7 +133,9 @@ public class SceneLoader {
 		pixelsPerWU = rm.getProjectVO().pixelToWorld;
 
 		sceneVO = rm.getSceneVO(sceneName);
-		world.setGravity(new Vector2(sceneVO.physicsPropertiesVO.gravityX, sceneVO.physicsPropertiesVO.gravityY));
+        if (!customGravity) {
+            world.setGravity(new Vector2(sceneVO.physicsPropertiesVO.gravityX, sceneVO.physicsPropertiesVO.gravityY));
+        }
 		if(sceneVO.composite == null) {
 			sceneVO.composite = new CompositeVO();
 		}
@@ -124,18 +145,27 @@ public class SceneLoader {
 		if(sceneVO.composite != null) {
 			entityFactory.initAllChildren(engine, rootEntity, sceneVO.composite);
 		}
-
-		setAmbienceInfo(sceneVO);
+        if (!customLight) {
+            setAmbienceInfo(sceneVO);
+        }
 		rayHandler.useCustomViewport(viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight());
 
 		return sceneVO;
 	}
 
+    public SceneVO loadScene(String sceneName, Viewport viewport) {
+      return loadScene(sceneName, viewport, false, false);
+    }
+
 	public SceneVO loadScene(String sceneName) {
-		ProjectInfoVO projectVO = rm.getProjectVO();
-		Viewport viewport = new ScalingViewport(Scaling.stretch, (float)projectVO.originalResolution.width/ pixelsPerWU, (float)projectVO.originalResolution.height/ pixelsPerWU, new OrthographicCamera());
-		return loadScene(sceneName, viewport);
+		return loadScene(sceneName, false, false);
 	}
+
+    public SceneVO loadScene(String sceneName, boolean customGravity, boolean customLight) {
+        ProjectInfoVO projectVO = rm.getProjectVO();
+        Viewport viewport = new ScalingViewport(Scaling.stretch, (float)projectVO.originalResolution.width/ pixelsPerWU, (float)projectVO.originalResolution.height/ pixelsPerWU, new OrthographicCamera());
+        return loadScene(sceneName, viewport, customGravity, customLight);
+    }
 
 	public void injectExternalItemType(IExternalItemType itemType) {
 		itemType.injectDependencies(rayHandler, world, rm);
@@ -157,7 +187,7 @@ public class SceneLoader {
 		LabelSystem labelSystem = new LabelSystem();
         ScriptSystem scriptSystem = new ScriptSystem();
         ActionSystem actionSystem = new ActionSystem();
-		renderer = new Overlap2dRenderer(new PolygonSpriteBatch(2000, createDefaultShader()));
+		renderer = new Overlap2dRenderer(new PolygonSpriteBatch(2000, createDefaultShader()), true);
 		renderer.setRayHandler(rayHandler);
 		renderer.setBox2dWorld(world);
 		

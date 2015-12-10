@@ -18,8 +18,10 @@ public class PhysicsBodyLoader {
 
     private float scale;
 
-    private PhysicsBodyLoader() {
+    public float mul;
 
+    private PhysicsBodyLoader() {
+        mul = 20f;
     }
 
     public static PhysicsBodyLoader getInstance() {
@@ -31,7 +33,7 @@ public class PhysicsBodyLoader {
     }
 
     public void setScaleFromPPWU(float pixelPerWU) {
-        scale = 1f/(20f*pixelPerWU);
+        scale = 1f/(mul*pixelPerWU);
     }
 
     public static float getScale() {
