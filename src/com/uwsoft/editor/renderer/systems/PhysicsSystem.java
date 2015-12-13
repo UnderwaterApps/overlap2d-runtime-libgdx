@@ -58,7 +58,8 @@ public class PhysicsSystem extends IteratingSystem {
             physicsBodyComponent.centerY = dimensionsComponent.height/2;
 
 			PhysicsBodyComponent bodyPropertiesComponent = ComponentRetriever.get(entity, PhysicsBodyComponent.class);
-			physicsBodyComponent.body = PhysicsBodyLoader.getInstance().createBody(world, bodyPropertiesComponent, polygonComponent.vertices, new Vector2(1, 1), transformComponent.rotation * MathUtils.degreesToRadians);
+			physicsBodyComponent.body = PhysicsBodyLoader.getInstance().createBody(world, bodyPropertiesComponent, polygonComponent.vertices, new Vector2(transformComponent.scaleX, transformComponent.scaleY),
+                    transformComponent.rotation * MathUtils.degreesToRadians);
 
             physicsBodyComponent.body.setTransform(new Vector2(transformComponent.x * PhysicsBodyLoader.getScale(), transformComponent.y * PhysicsBodyLoader.getScale()), physicsBodyComponent.body.getAngle());
 			physicsBodyComponent.body.setUserData(entity);

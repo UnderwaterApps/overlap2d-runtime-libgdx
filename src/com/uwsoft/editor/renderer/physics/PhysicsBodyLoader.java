@@ -76,8 +76,11 @@ public class PhysicsBodyLoader {
                 minPolygonData[i][j/2].x -= physicsComponent.centerX;
                 minPolygonData[i][j/2].y -= physicsComponent.centerY;
 
-        		verts[j] = (minPolygonData[i][j/2].x * (float)Math.cos(rotationRad) - minPolygonData[i][j/2].y * (float)Math.sin(rotationRad)) * mulVec.x * scale ;
-        		verts[j+1] = (minPolygonData[i][j/2].x * (float)Math.sin(rotationRad) + minPolygonData[i][j/2].y * (float)Math.cos(rotationRad)) * mulVec.y * scale;
+                minPolygonData[i][j/2].x *= mulVec.x;
+                minPolygonData[i][j/2].y *= mulVec.y;
+
+        		verts[j] = (minPolygonData[i][j/2].x * (float)Math.cos(rotationRad) - minPolygonData[i][j/2].y * (float)Math.sin(rotationRad)) * scale ;
+        		verts[j+1] = (minPolygonData[i][j/2].x * (float)Math.sin(rotationRad) + minPolygonData[i][j/2].y * (float)Math.cos(rotationRad)) * scale;
 
                 verts[j] += physicsComponent.centerX;
                 verts[j+1] += physicsComponent.centerY;
