@@ -1,6 +1,5 @@
 package com.uwsoft.editor.renderer.physics;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -40,7 +39,7 @@ public class PhysicsBodyLoader {
         return getInstance().scale;
     }
 
-    public Body createBody(World world, PhysicsBodyComponent physicsComponent, Vector2[][] minPolygonData, Vector2 mulVec) {
+    public Body createBody(World world, PhysicsBodyComponent physicsComponent, Vector2[][] minPolygonData, Vector2 mulVec, float rotationRad) {
 
         FixtureDef fixtureDef = new FixtureDef();
 
@@ -74,8 +73,15 @@ public class PhysicsBodyLoader {
         for(int i = 0; i < minPolygonData.length; i++) {
         	float[] verts = new float[minPolygonData[i].length * 2];
         	for(int j=0;j<verts.length;j+=2){
-        		verts[j] = minPolygonData[i][j/2].x * mulVec.x * scale;
-        		verts[j+1] = minPolygonData[i][j/2].y * mulVec.y * scale;
+                minPolygonData[i][j/2].x -= physicsComponent.centerX;
+                minPolygonData[i][j/2].y -= physicsComponent.centerY;
+
+        		verts[j] = (minPolygonData[i][j/2].x * (float)Math.cos(rotationRad) - minPolygonData[i][j/2].y * (float)Math.sin(rotationRad)) * mulVec.x * scale ;
+        		verts[j+1] = (minPolygonData[i][j/2].x * (float)Math.sin(rotationRad) + minPolygonData[i][j/2].y * (float)Math.cos(rotationRad)) * mulVec.y * scale;
+
+                verts[j] += physicsComponent.centerX;
+                verts[j+1] += physicsComponent.centerY;
+
         	}
             polygonShape.set(verts);
             fixtureDef.shape = polygonShape;

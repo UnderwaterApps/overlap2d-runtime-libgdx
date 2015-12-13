@@ -22,6 +22,9 @@ public class PhysicsBodyComponent implements Component {
 	public float friction;
 	public float restitution;
 
+    public float centerX;
+    public float centerY;
+
     public Body body;
 
     public PhysicsBodyComponent() {
