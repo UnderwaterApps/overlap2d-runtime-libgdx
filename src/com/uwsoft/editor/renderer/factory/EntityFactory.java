@@ -284,11 +284,6 @@ public class EntityFactory {
 			engine.addEntity(child);
 		}
 
-		for (int i = 0; i < vo.sSpriterAnimations.size(); i++) {
-			Entity child = createEntity(entity, vo.sSpriterAnimations.get(i));
-			engine.addEntity(child);
-		}
-
 		for (int i = 0; i < vo.sColorPrimitives.size(); i++) {
 			Entity child = createEntity(entity, vo.sColorPrimitives.get(i));
 			engine.addEntity(child);
