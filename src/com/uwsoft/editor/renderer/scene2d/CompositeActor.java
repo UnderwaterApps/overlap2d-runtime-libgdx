@@ -11,10 +11,8 @@ import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.scripts.IActorScript;
-import com.uwsoft.editor.renderer.scripts.IScript;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -77,7 +75,7 @@ public class CompositeActor extends Group {
         }
     }
 
-    private void buildComposites(ArrayList<CompositeItemVO> composites, BuiltItemHandler itemHandler) {
+    protected void buildComposites(ArrayList<CompositeItemVO> composites, BuiltItemHandler itemHandler) {
 
         for(int i = 0; i < composites.size(); i++) {
             String className   =   getClassName(composites.get(i).customVars);
@@ -114,7 +112,7 @@ public class CompositeActor extends Group {
         iScript.init(this);
     }
 
-    private void buildImages(ArrayList<SimpleImageVO> images, BuiltItemHandler itemHandler) {
+    protected void buildImages(ArrayList<SimpleImageVO> images, BuiltItemHandler itemHandler) {
         for(int i = 0; i < images.size(); i++) {
             Image image = new Image(ir.getTextureRegion(images.get(i).imageName));
             processMain(image, images.get(i));
@@ -124,7 +122,7 @@ public class CompositeActor extends Group {
         }
     }
 
-    private void build9PatchImages(ArrayList<Image9patchVO> patches, BuiltItemHandler itemHandler) {
+    protected void build9PatchImages(ArrayList<Image9patchVO> patches, BuiltItemHandler itemHandler) {
         for(int i = 0; i < patches.size(); i++) {
             TextureAtlas.AtlasRegion region = (TextureAtlas.AtlasRegion) ir.getTextureRegion(patches.get(i).imageName);
             NinePatch ninePatch = new NinePatch(region, region.splits[0], region.splits[1], region.splits[2], region.splits[3]);
@@ -138,7 +136,7 @@ public class CompositeActor extends Group {
         }
     }
 
-    private void buildLabels(ArrayList<LabelVO> labels, BuiltItemHandler itemHandler) {
+    protected void buildLabels(ArrayList<LabelVO> labels, BuiltItemHandler itemHandler) {
         for(int i = 0; i < labels.size(); i++) {
             Label.LabelStyle style = new Label.LabelStyle(ir.getBitmapFont(labels.get(i).style, labels.get(i).size), Color.WHITE);
             Label label = new Label(labels.get(i).text, style);
@@ -192,7 +190,7 @@ public class CompositeActor extends Group {
     }
 
 
-    private void processZIndexes() {
+    protected void processZIndexes() {
         Object[] indexArray = indexes.keySet().toArray();
         Arrays.sort(indexArray);
 
