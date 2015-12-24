@@ -34,13 +34,14 @@ public class EntityFactory {
 	public static final int PARTICLE_TYPE 	= 7;
 	public static final int LIGHT_TYPE 		= 8;
 	public static final int NINE_PATCH 		= 9;
+	public static final int COLOR_PRIMITIVE = 10;
 	
 	public RayHandler rayHandler;
 	public World world;
 	public IResourceRetriever rm = null;
 
 	private ComponentFactory compositeComponentFactory, lightComponentFactory, particleEffectComponentFactory,
-			simpleImageComponentFactory, spriteComponentFactory, spriterComponentFactory, labelComponentFactory, ninePatchComponentFactory;
+			simpleImageComponentFactory, spriteComponentFactory, spriterComponentFactory, labelComponentFactory, ninePatchComponentFactory, colorPrimitiveFactory;
 
 	private HashMap<Integer, ComponentFactory> externalFactories = new HashMap<Integer, ComponentFactory>();
 
@@ -68,6 +69,7 @@ public class EntityFactory {
 		spriterComponentFactory = new SpriterComponentFactory(rayHandler, world, rm);
 		labelComponentFactory = new LabelComponentFactory(rayHandler, world, rm);
 		ninePatchComponentFactory = new NinePatchComponentFactory(rayHandler, world, rm);
+		colorPrimitiveFactory = new ColorPrimitiveComponentFactory(rayHandler, world, rm);
 		
 	}
 
@@ -176,6 +178,17 @@ public class EntityFactory {
 		return entity;
 	}
 
+	public Entity createEntity(Entity root, ColorPrimitiveVO vo){
+
+		Entity entity = new Entity();
+
+		colorPrimitiveFactory.createComponents(root, entity, vo);
+
+		postProcessEntity(entity);
+
+		return entity;
+	}
+
 	public Entity createRootEntity(CompositeVO compositeVo, Viewport viewport){
 
 		CompositeItemVO vo = new CompositeItemVO();
@@ -271,6 +284,11 @@ public class EntityFactory {
 			engine.addEntity(child);
 		}
 
+		for (int i = 0; i < vo.sColorPrimitives.size(); i++) {
+			Entity child = createEntity(entity, vo.sColorPrimitives.get(i));
+			engine.addEntity(child);
+		}
+
 		for (int i = 0; i < vo.sComposites.size(); i++) {
 			Entity child = createEntity(entity, vo.sComposites.get(i));
 			engine.addEntity(child);
@@ -282,5 +300,8 @@ public class EntityFactory {
 		return entities.get(id);
 	}
 
-	
+
+	public void clean() {
+		entities.clear();
+	}
 }

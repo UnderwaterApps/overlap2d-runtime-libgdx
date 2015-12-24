@@ -30,6 +30,7 @@ import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.resources.ResourceManager;
 import com.uwsoft.editor.renderer.scripts.IScript;
 import com.uwsoft.editor.renderer.systems.*;
+import com.uwsoft.editor.renderer.systems.action.ActionSystem;
 import com.uwsoft.editor.renderer.systems.render.Overlap2dRenderer;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
@@ -108,6 +109,7 @@ public class SceneLoader {
 
 		// this has to be done differently.
 		engine.removeAllEntities();
+		entityFactory.clean();
 
 		pixelsPerWU = rm.getProjectVO().pixelToWorld;
 
@@ -154,6 +156,7 @@ public class SceneLoader {
 		CompositeSystem compositeSystem = new CompositeSystem();
 		LabelSystem labelSystem = new LabelSystem();
         ScriptSystem scriptSystem = new ScriptSystem();
+        ActionSystem actionSystem = new ActionSystem();
 		renderer = new Overlap2dRenderer(new PolygonSpriteBatch(2000, createDefaultShader()));
 		renderer.setRayHandler(rayHandler);
 		renderer.setBox2dWorld(world);
@@ -166,6 +169,7 @@ public class SceneLoader {
 		engine.addSystem(compositeSystem);
 		engine.addSystem(labelSystem);
         engine.addSystem(scriptSystem);
+        engine.addSystem(actionSystem);
 		engine.addSystem(renderer);
 
         // additional

@@ -53,11 +53,7 @@ public class TexturRegionDrawLogic implements Drawable {
 		}
         
         if(entityTextureRegionComponent.polygonSprite != null) {
-//            if(entityTextureRegionComponent.isRepeat) {
-            	drawTiledPolygonSprite(batch, entity);
-//            } else {
-//                drawPolygonSprite(batch, entity);
-//            }
+            drawTiledPolygonSprite(batch, entity);
         } else {
             drawSprite(batch, entity, parentAlpha);
         }
@@ -107,13 +103,14 @@ public class TexturRegionDrawLogic implements Drawable {
 
         Vector2 atlasCoordsVector = new Vector2(entityTextureRegionComponent.region.getU(), entityTextureRegionComponent.region.getV());
         Vector2 atlasSizeVector = new Vector2(entityTextureRegionComponent.region.getU2()-entityTextureRegionComponent.region.getU(), entityTextureRegionComponent.region.getV2()-entityTextureRegionComponent.region.getV());
-        
+
         batch.getShader().setUniformi("isRepeat", 1);
         batch.getShader().setUniformf("atlasCoord", atlasCoordsVector);
     	batch.getShader().setUniformf("atlasSize", atlasSizeVector);
-        
-        batch.setColor(tintComponent.color);
-        entityTextureRegionComponent.polygonSprite.setOrigin(entityTransformComponent.originX, entityTransformComponent.originY);
+        //System.out.println(entityTransformComponent.originX);
+        //batch.setColor(tintComponent.color);
+        entityTextureRegionComponent.polygonSprite.setColor(tintComponent.color);
+        entityTextureRegionComponent.polygonSprite.setOrigin(entityTransformComponent.originX * ppwu, entityTransformComponent.originY * ppwu);
         entityTextureRegionComponent.polygonSprite.setPosition(entityTransformComponent.x, entityTransformComponent.y);
         entityTextureRegionComponent.polygonSprite.setRotation(entityTransformComponent.rotation);
         entityTextureRegionComponent.polygonSprite.setScale(ppwu);
