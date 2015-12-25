@@ -19,7 +19,10 @@ public class PhysicsSystem extends IteratingSystem {
 
 	protected ComponentMapper<TransformComponent> transformComponentMapper = ComponentMapper.getFor(TransformComponent.class);
 
+	private final float TIME_STEP = 1f/60;
 	private World world;
+	private boolean isPhysicsOn = true;
+	private float accumulator = 0;
 
 	public PhysicsSystem(World world) {
 		super(Family.all(PhysicsBodyComponent.class).get());
@@ -37,6 +40,10 @@ public class PhysicsSystem extends IteratingSystem {
 		transformComponent.x = body.getPosition().x/ PhysicsBodyLoader.getScale();
 		transformComponent.y = body.getPosition().y/ PhysicsBodyLoader.getScale();
 //		transformComponent.rotation = body.getAngle() * MathUtils.radiansToDegrees;
+
+		if (world != null && isPhysicsOn) {
+			doPhysicsStep(deltaTime);
+		}
 	}
 
 	protected void processBody(Entity entity) {
@@ -64,6 +71,21 @@ public class PhysicsSystem extends IteratingSystem {
             physicsBodyComponent.body.setTransform(new Vector2(transformComponent.x * PhysicsBodyLoader.getScale(), transformComponent.y * PhysicsBodyLoader.getScale()), physicsBodyComponent.body.getAngle());
 			physicsBodyComponent.body.setUserData(entity);
 		}
+	}
+
+	private void doPhysicsStep(float deltaTime) {
+		// fixed time step
+		// max frame time to avoid spiral of death (on slow devices)
+		float frameTime = Math.min(deltaTime, 0.25f);
+		accumulator += frameTime;
+		while (accumulator >= TIME_STEP) {
+			world.step(TIME_STEP, 6, 2);
+			accumulator -= TIME_STEP;
+		}
+	}
+
+	public void setPhysicsOn(boolean isPhysicsOn) {
+		this.isPhysicsOn = isPhysicsOn;
 	}
 
 }

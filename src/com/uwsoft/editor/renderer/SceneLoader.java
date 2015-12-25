@@ -58,7 +58,7 @@ public class SceneLoader {
 	private Overlap2dRenderer renderer;
 	private Entity root;
 
-	public SceneLoader(World world, RayHandler rayHandler) {
+    public SceneLoader(World world, RayHandler rayHandler) {
         this.world = world;
         this.rayHandler = rayHandler;
 		ResourceManager rm = new ResourceManager();
@@ -124,7 +124,7 @@ public class SceneLoader {
 		return sceneVO;
 	}
 
-	public SceneVO loadScene(String sceneName, Viewport viewport, boolean customGravity, boolean customLight) {
+	public SceneVO loadScene(String sceneName, Viewport viewport, boolean customLight) {
 
 		// this has to be done differently.
 		engine.removeAllEntities();
@@ -133,9 +133,8 @@ public class SceneLoader {
 		pixelsPerWU = rm.getProjectVO().pixelToWorld;
 
 		sceneVO = rm.getSceneVO(sceneName);
-        if (!customGravity) {
-            world.setGravity(new Vector2(sceneVO.physicsPropertiesVO.gravityX, sceneVO.physicsPropertiesVO.gravityY));
-        }
+        world.setGravity(new Vector2(sceneVO.physicsPropertiesVO.gravityX, sceneVO.physicsPropertiesVO.gravityY));
+
 		if(sceneVO.composite == null) {
 			sceneVO.composite = new CompositeVO();
 		}
@@ -154,17 +153,17 @@ public class SceneLoader {
 	}
 
     public SceneVO loadScene(String sceneName, Viewport viewport) {
-      return loadScene(sceneName, viewport, false, false);
+      return loadScene(sceneName, viewport, false);
     }
 
 	public SceneVO loadScene(String sceneName) {
-		return loadScene(sceneName, false, false);
+		return loadScene(sceneName, false);
 	}
 
-    public SceneVO loadScene(String sceneName, boolean customGravity, boolean customLight) {
+    public SceneVO loadScene(String sceneName, boolean customLight) {
         ProjectInfoVO projectVO = rm.getProjectVO();
         Viewport viewport = new ScalingViewport(Scaling.stretch, (float)projectVO.originalResolution.width/ pixelsPerWU, (float)projectVO.originalResolution.height/ pixelsPerWU, new OrthographicCamera());
-        return loadScene(sceneName, viewport, customGravity, customLight);
+        return loadScene(sceneName, viewport, customLight);
     }
 
 	public void injectExternalItemType(IExternalItemType itemType) {
@@ -187,9 +186,9 @@ public class SceneLoader {
 		LabelSystem labelSystem = new LabelSystem();
         ScriptSystem scriptSystem = new ScriptSystem();
         ActionSystem actionSystem = new ActionSystem();
-		renderer = new Overlap2dRenderer(new PolygonSpriteBatch(2000, createDefaultShader()), true);
+		renderer = new Overlap2dRenderer(new PolygonSpriteBatch(2000, createDefaultShader()));
 		renderer.setRayHandler(rayHandler);
-		renderer.setBox2dWorld(world);
+//		renderer.setBox2dWorld(world);
 		
 		engine.addSystem(animationSystem);
 		engine.addSystem(particleSystem);
@@ -383,7 +382,6 @@ public class SceneLoader {
 		if (shader.isCompiled() == false) throw new IllegalArgumentException("Error compiling shader: " + shader.getLog());
 		return shader;
 	}
-
 
     public Batch getBatch() {
         return renderer.getBatch();

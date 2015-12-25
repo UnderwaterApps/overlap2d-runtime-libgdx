@@ -23,7 +23,6 @@ import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 public class Overlap2dRenderer extends IteratingSystem {
 	private final float TIME_STEP = 1f/60;
-	private final boolean drawOnly;
 
 	private ComponentMapper<ViewPortComponent> viewPortMapper = ComponentMapper.getFor(ViewPortComponent.class);
 	private ComponentMapper<CompositeTransformComponent> compositeTransformMapper = ComponentMapper.getFor(CompositeTransformComponent.class);
@@ -34,10 +33,8 @@ public class Overlap2dRenderer extends IteratingSystem {
 	
 	private DrawableLogicMapper drawableLogicMapper;
 	private RayHandler rayHandler;
-	private World world;
-	private boolean isPhysicsOn = true;
-	
-	private float accumulator = 0;
+//	private World world;
+
 	//private Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
 
 	public static float timeRunning = 0;
@@ -45,14 +42,9 @@ public class Overlap2dRenderer extends IteratingSystem {
 	public Batch batch;
 
 	public Overlap2dRenderer(Batch batch) {
-	this(batch, false);
-	}
-
-	public Overlap2dRenderer(Batch batch, boolean drawOnly) {
 		super(Family.all(ViewPortComponent.class).get());
 		this.batch = batch;
 		drawableLogicMapper = new DrawableLogicMapper();
-		this.drawOnly = drawOnly;
 	}
 
 	public void addDrawableType(IExternalItemType itemType) {
@@ -65,14 +57,12 @@ public class Overlap2dRenderer extends IteratingSystem {
 
 		ViewPortComponent ViewPortComponent = viewPortMapper.get(entity);
 		Camera camera = ViewPortComponent.viewPort.getCamera();
-		// camera.update();
+		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		drawRecursively(entity, 1f);
 		batch.end();
 
-
-		if (!drawOnly) {
 			//TODO kinda not cool (this should be done in separate lights renderer maybe?
 			if (rayHandler != null) {
 				rayHandler.setCulling(false);
@@ -82,24 +72,8 @@ public class Overlap2dRenderer extends IteratingSystem {
 				rayHandler.updateAndRender();
 			}
 
-			if (world != null && isPhysicsOn) {
-				doPhysicsStep(deltaTime);
-			}
-		}
-
 		//debugRenderer.render(world, camera.combined);
 		//TODO Spine rendere thing
-	}
-
-	private void doPhysicsStep(float deltaTime) {
-	    // fixed time step
-	    // max frame time to avoid spiral of death (on slow devices)
-	    float frameTime = Math.min(deltaTime, 0.25f);
-	    accumulator += frameTime;
-	    while (accumulator >= TIME_STEP) {
-	        world.step(TIME_STEP, 6, 2);
-	        accumulator -= TIME_STEP;
-	    }
 	}
 
 	private void drawRecursively(Entity rootEntity, float parentAlpha) {
@@ -261,13 +235,9 @@ public class Overlap2dRenderer extends IteratingSystem {
 		this.rayHandler = rayHandler;
 	}
 
-	public void setBox2dWorld(World world) {
-		this.world = world;
-	}
-	
-	public void setPhysicsOn(boolean isPhysicsOn) {
-		this.isPhysicsOn = isPhysicsOn;
-	}
+//	public void setBox2dWorld(World world) {
+//		this.world = world;
+//	}
 
     public Batch getBatch() {
         return batch;
