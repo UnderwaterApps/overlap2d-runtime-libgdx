@@ -99,7 +99,7 @@ public class Overlap2dRenderer extends IteratingSystem {
 		TransformComponent transform = transformMapper.get(rootEntity);
 		
 		
-		if (curCompositeTransformComponent.transform || transform.rotation != 0 || transform.scaleX !=0 || transform.scaleY !=0){
+		if (curCompositeTransformComponent.transform || transform.rotation != 0 || transform.scaleX !=1 || transform.scaleY !=1){
 			computeTransform(rootEntity);
 			applyTransform(rootEntity, batch);
 		}
@@ -107,7 +107,7 @@ public class Overlap2dRenderer extends IteratingSystem {
         parentAlpha *= tintComponent.color.a;
 
 		drawChildren(rootEntity, batch, curCompositeTransformComponent, parentAlpha);
-		if (curCompositeTransformComponent.transform || transform.rotation != 0 || transform.scaleX !=0 || transform.scaleY !=0)
+		if (curCompositeTransformComponent.transform || transform.rotation != 0 || transform.scaleX !=1 || transform.scaleY !=1)
 			resetTransform(rootEntity, batch);
 	}
 
@@ -115,7 +115,7 @@ public class Overlap2dRenderer extends IteratingSystem {
 		NodeComponent nodeComponent = nodeMapper.get(rootEntity);
 		Entity[] children = nodeComponent.children.begin();
 		TransformComponent transform = transformMapper.get(rootEntity);
-		if (curCompositeTransformComponent.transform || transform.rotation != 0 || transform.scaleX !=0 || transform.scaleY !=0) {
+		if (curCompositeTransformComponent.transform || transform.rotation != 0 || transform.scaleX !=1 || transform.scaleY !=1) {
 			for (int i = 0, n = nodeComponent.children.size; i < n; i++) {
 				Entity child = children[i];
 
