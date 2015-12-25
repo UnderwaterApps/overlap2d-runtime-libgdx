@@ -114,8 +114,8 @@ public class Overlap2dRenderer extends IteratingSystem {
 	private void drawChildren(Entity rootEntity, Batch batch, CompositeTransformComponent curCompositeTransformComponent, float parentAlpha) {
 		NodeComponent nodeComponent = nodeMapper.get(rootEntity);
 		Entity[] children = nodeComponent.children.begin();
-
-		if (curCompositeTransformComponent.transform) {
+		TransformComponent transform = transformMapper.get(rootEntity);
+		if (curCompositeTransformComponent.transform || transform.rotation != 0 || transform.scaleX !=0 || transform.scaleY !=0) {
 			for (int i = 0, n = nodeComponent.children.size; i < n; i++) {
 				Entity child = children[i];
 
