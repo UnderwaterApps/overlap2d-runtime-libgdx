@@ -1,18 +1,15 @@
 package com.uwsoft.editor.renderer.systems.render;
 
 import box2dLight.RayHandler;
-
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.uwsoft.editor.renderer.commons.IExternalItemType;
 import com.uwsoft.editor.renderer.components.*;
@@ -77,13 +74,14 @@ public class Overlap2dRenderer extends IteratingSystem {
 	}
 
 	private void drawRecursively(Entity rootEntity, float parentAlpha) {
-		
+
 		
 		//currentComposite = rootEntity;
 		CompositeTransformComponent curCompositeTransformComponent = compositeTransformMapper.get(rootEntity);
+		TransformComponent transform = transformMapper.get(rootEntity);
 		
 		
-		if (curCompositeTransformComponent.transform){
+		if (curCompositeTransformComponent.transform || transform.rotation != 0 || transform.scaleX !=1 || transform.scaleY !=1){
 			computeTransform(rootEntity);
 			applyTransform(rootEntity, batch);
 		}
@@ -91,14 +89,15 @@ public class Overlap2dRenderer extends IteratingSystem {
         parentAlpha *= tintComponent.color.a;
 
 		drawChildren(rootEntity, batch, curCompositeTransformComponent, parentAlpha);
-		if (curCompositeTransformComponent.transform) resetTransform(rootEntity, batch);
+		if (curCompositeTransformComponent.transform || transform.rotation != 0 || transform.scaleX !=1 || transform.scaleY !=1)
+			resetTransform(rootEntity, batch);
 	}
 
 	private void drawChildren(Entity rootEntity, Batch batch, CompositeTransformComponent curCompositeTransformComponent, float parentAlpha) {
 		NodeComponent nodeComponent = nodeMapper.get(rootEntity);
 		Entity[] children = nodeComponent.children.begin();
-
-		if (curCompositeTransformComponent.transform) {
+		TransformComponent transform = transformMapper.get(rootEntity);
+		if (curCompositeTransformComponent.transform || transform.rotation != 0 || transform.scaleX !=1 || transform.scaleY !=1) {
 			for (int i = 0, n = nodeComponent.children.size; i < n; i++) {
 				Entity child = children[i];
 
@@ -141,6 +140,18 @@ public class Overlap2dRenderer extends IteratingSystem {
 			for (int i = 0, n = nodeComponent.children.size; i < n; i++) {
 				Entity child = children[i];
 
+				LayerMapComponent rootLayers = ComponentRetriever.get(rootEntity, LayerMapComponent.class);
+				ZIndexComponent childZIndexComponent = ComponentRetriever.get(child, ZIndexComponent.class);
+
+				if(!rootLayers.isVisible(childZIndexComponent.layerName)) {
+					continue;
+				}
+
+				MainItemComponent childMainItemComponent = mainItemComponentMapper.get(child);
+				if(!childMainItemComponent.visible){
+					continue;
+				}
+
 				TransformComponent childTransformComponent = transformMapper.get(child);
 				float cx = childTransformComponent.x, cy = childTransformComponent.y;
 				childTransformComponent.x = cx + offsetX;
@@ -158,10 +169,6 @@ public class Overlap2dRenderer extends IteratingSystem {
 				}
 				childTransformComponent.x = cx;
 				childTransformComponent.y = cy;
-				
-				if(childNodeComponent !=null){
-					drawRecursively(child, parentAlpha);
-				}
 			}
 		}
 		nodeComponent.children.end();

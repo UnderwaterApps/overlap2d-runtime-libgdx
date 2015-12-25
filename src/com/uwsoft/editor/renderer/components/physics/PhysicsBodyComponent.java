@@ -3,6 +3,7 @@ package com.uwsoft.editor.renderer.components.physics;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Filter;
 
 public class PhysicsBodyComponent implements Component {
 	public int bodyType;
@@ -21,6 +22,7 @@ public class PhysicsBodyComponent implements Component {
 	public float density;
 	public float friction;
 	public float restitution;
+    public Filter filter;
 
     public float centerX;
     public float centerY;
@@ -42,5 +44,6 @@ public class PhysicsBodyComponent implements Component {
         density = 1;
         friction = 1;
         restitution = 1;
+        filter = new Filter();
     }
 }
