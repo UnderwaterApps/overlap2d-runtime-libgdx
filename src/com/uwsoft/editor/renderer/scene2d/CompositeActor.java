@@ -23,7 +23,7 @@ import java.util.HashMap;
  */
 public class CompositeActor extends Group {
 
-    private IResourceRetriever ir;
+    protected IResourceRetriever ir;
 
     private float pixelsPerWU;
     private float resMultiplier;
