@@ -11,7 +11,7 @@ public class PhysicsBodyLoader {
 
     private static PhysicsBodyLoader instance;
 
-    private float scale;
+    public float scale;
 
     public float mul;
 
