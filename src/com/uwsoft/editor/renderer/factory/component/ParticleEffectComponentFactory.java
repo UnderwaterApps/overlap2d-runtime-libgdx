@@ -19,21 +19,17 @@
 package com.uwsoft.editor.renderer.factory.component;
 
 import box2dLight.RayHandler;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.World;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
-import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.particle.ParticleComponent;
 import com.uwsoft.editor.renderer.data.MainItemVO;
 import com.uwsoft.editor.renderer.data.ParticleEffectVO;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
-import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
-import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
  * Created by azakhary on 5/22/2015.
@@ -74,7 +70,7 @@ public class ParticleEffectComponentFactory extends ComponentFactory {
         ProjectInfoVO projectInfoVO = rm.getProjectVO();
 
         component.worldMultiplyer = 1f/projectInfoVO.pixelToWorld;
-
+        particleEffect.scaleEffect(component.worldMultiplyer);
         entity.add(component);
         return component;
     }
