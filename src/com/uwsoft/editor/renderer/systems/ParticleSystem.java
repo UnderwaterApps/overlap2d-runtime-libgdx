@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.brashmonkey.spriter.Dimension;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.particle.ParticleComponent;
@@ -30,7 +29,8 @@ public class ParticleSystem extends IteratingSystem {
 		DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
 		ParticleEffect particleEffect = particleComponent.particleEffect;
 		
-		particleEffect.setPosition(transformComponent.x/particleComponent.worldMultiplyer, transformComponent.y/particleComponent.worldMultiplyer);
+		//particleEffect.setPosition(transformComponent.x/particleComponent.worldMultiplyer, transformComponent.y/particleComponent.worldMultiplyer);
+		particleEffect.setPosition(transformComponent.x, transformComponent.y);
 		particleEffect.update(deltaTime);
 		//ParentNodeComponent parentNodeComponent = parentNodeComponentMapper.get(entity);
 		
