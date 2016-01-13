@@ -23,7 +23,7 @@ import java.util.HashMap;
  */
 public class CompositeActor extends Group {
 
-    private IResourceRetriever ir;
+    protected IResourceRetriever ir;
 
     private float pixelsPerWU;
     private float resMultiplier;
@@ -61,7 +61,7 @@ public class CompositeActor extends Group {
         }
     }
 
-    private void build(CompositeItemVO vo, BuiltItemHandler itemHandler, boolean isRoot) {
+    protected void build(CompositeItemVO vo, BuiltItemHandler itemHandler, boolean isRoot) {
         buildImages(vo.composite.sImages, itemHandler);
         build9PatchImages(vo.composite.sImage9patchs, itemHandler);
         buildLabels(vo.composite.sLabels, itemHandler);
@@ -150,7 +150,7 @@ public class CompositeActor extends Group {
         }
     }
 
-    private void processMain(Actor actor, MainItemVO vo) {
+    protected void processMain(Actor actor, MainItemVO vo) {
 
         buildCoreData(actor, vo);
 
@@ -170,7 +170,7 @@ public class CompositeActor extends Group {
         }
     }
 
-    private void buildCoreData(Actor actor, MainItemVO vo){
+    protected void buildCoreData(Actor actor, MainItemVO vo){
 
         //custom variables
         CustomVariables cv = null;
