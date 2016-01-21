@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
@@ -40,7 +39,8 @@ public class CompositeSystem extends IteratingSystem {
 	}
 	
 	public void recalculateSize() {
-        float lowerX = 0, lowerY = 0, upperX = 0, upperY = 0;
+		// before: float lowerX = 0, lowerY = 0  <- We check       Min(0, Something)    at the bottom of the function this way!
+        float lowerX = Float.MAX_VALUE, lowerY = Float.MAX_VALUE, upperX = Float.MIN_VALUE, upperY = Float.MIN_VALUE;
         SnapshotArray<Entity> entities = nodeComponent.children;
         
         float cos = 0;
