@@ -82,8 +82,8 @@ public class PhysicsBodyLoader {
         		verts[j] = (minPolygonData[i][j/2].x * (float)Math.cos(rotationRad) - minPolygonData[i][j/2].y * (float)Math.sin(rotationRad)) * scale ;
         		verts[j+1] = (minPolygonData[i][j/2].x * (float)Math.sin(rotationRad) + minPolygonData[i][j/2].y * (float)Math.cos(rotationRad)) * scale;
 
-                verts[j] += physicsComponent.centerX;
-                verts[j+1] += physicsComponent.centerY;
+                verts[j] += physicsComponent.centerX * scale;
+                verts[j+1] += physicsComponent.centerY * scale;
 
         	}
             polygonShape.set(verts);
