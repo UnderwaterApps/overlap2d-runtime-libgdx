@@ -73,6 +73,9 @@ public class PhysicsBodyLoader {
         for(int i = 0; i < minPolygonData.length; i++) {
         	float[] verts = new float[minPolygonData[i].length * 2];
         	for(int j=0;j<verts.length;j+=2){
+                float tempX = minPolygonData[i][j / 2].x;
+                float tempY = minPolygonData[i][j/2].y;
+
                 minPolygonData[i][j/2].x -= physicsComponent.centerX;
                 minPolygonData[i][j/2].y -= physicsComponent.centerY;
 
@@ -84,6 +87,9 @@ public class PhysicsBodyLoader {
 
                 verts[j] += physicsComponent.centerX * scale;
                 verts[j+1] += physicsComponent.centerY * scale;
+
+                minPolygonData[i][j / 2].x = tempX;
+                minPolygonData[i][j/2].y = tempY;
 
         	}
             polygonShape.set(verts);

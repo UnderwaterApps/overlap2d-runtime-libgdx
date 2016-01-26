@@ -246,7 +246,16 @@ public class Overlap2dRenderer extends IteratingSystem {
 //		this.world = world;
 //	}
 
-    public Batch getBatch() {
+	//this method has been left to avoid any compatibility issue
+	//setPhysicsOn has been moved in PhysicsSystem class
+	//Physics is now totally decoupled from rendering
+	@Deprecated
+	public void setPhysicsOn(boolean isPhysicsOn) {
+		//empty
+	}
+
+
+	public Batch getBatch() {
         return batch;
     }
 }
