@@ -204,7 +204,8 @@ public class EntityFactory {
 		viewPortComponent.viewPort = viewport;
 
 		//TODO: not sure if this line is okay
-//		viewPortComponent.viewPort.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+        //without this line the editor won't load
+		viewPortComponent.viewPort.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 
 		entity.add(transform);
 		entity.add(viewPortComponent);
