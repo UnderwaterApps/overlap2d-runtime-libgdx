@@ -82,7 +82,11 @@ public class Overlap2dRenderer extends IteratingSystem {
 		
 		
 		if (curCompositeTransformComponent.transform || transform.rotation != 0 || transform.scaleX !=1 || transform.scaleY !=1){
+			MainItemComponent childMainItemComponent = mainItemComponentMapper.get(rootEntity);
+			//System.out.println(" Name " +childMainItemComponent.itemIdentifier);
+		//System.out.println(curCompositeTransformComponent.computedTransform.toString());
 			computeTransform(rootEntity);
+		//System.out.println(curCompositeTransformComponent.computedTransform.toString());
 			applyTransform(rootEntity, batch);
 		}
         TintComponent tintComponent = ComponentRetriever.get(rootEntity, TintComponent.class);
@@ -213,12 +217,14 @@ public class Overlap2dRenderer extends IteratingSystem {
 //			System.out.println("Gand");
 //			parentEntity = parentNodeComponent.parentEntity;
 //			parentTransformComponent = compositeTransformMapper.get(parentEntity);
-//			
+//
 //		}
 		
 		if (parentEntity != null){
 			parentTransformComponent = compositeTransformMapper.get(parentEntity);
-			worldTransform.preMul(parentTransformComponent.worldTransform);
+			TransformComponent transform = transformMapper.get(parentEntity);
+			if(curCompositeTransformComponent.transform || transform.rotation != 0 || transform.scaleX !=1 || transform.scaleY !=1)
+				worldTransform.preMul(parentTransformComponent.worldTransform);
 			//MainItemComponent main = parentEntity.getComponent(MainItemComponent.class);
 			//System.out.println("NAME " + main.itemIdentifier);
 		}
