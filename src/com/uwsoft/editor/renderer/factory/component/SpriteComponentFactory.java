@@ -94,7 +94,14 @@ public class SpriteComponentFactory extends ComponentFactory {
         if(vo.playMode == 5) spriteAnimationComponent.playMode = Animation.PlayMode.LOOP_RANDOM;
         if(vo.playMode == 6) spriteAnimationComponent.playMode = Animation.PlayMode.NORMAL;
 
-        Array<TextureAtlas.AtlasRegion> regions = rm.getSpriteAnimation(spriteAnimationComponent.animationName).getRegions();
+        // filtering regions by name
+        Array<TextureAtlas.AtlasRegion> allRegions = rm.getSpriteAnimation(spriteAnimationComponent.animationName).getRegions();
+        Array<TextureAtlas.AtlasRegion> regions = new Array<TextureAtlas.AtlasRegion>();
+        for(TextureAtlas.AtlasRegion region: allRegions) {
+            if(region.name.contains(vo.animationName)) {
+                regions.add(region);
+            }
+        }
 
         AnimationComponent animationComponent = new AnimationComponent();
         SpriteAnimationStateComponent stateComponent = new SpriteAnimationStateComponent(regions);
