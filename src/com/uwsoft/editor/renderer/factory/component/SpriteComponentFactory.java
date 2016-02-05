@@ -65,15 +65,6 @@ public class SpriteComponentFactory extends ComponentFactory {
         SpriteAnimationVO sVo = (SpriteAnimationVO) vo;
         Array<TextureAtlas.AtlasRegion> regions = rm.getSpriteAnimation(sVo.animationName).getRegions();
 
-        // cleanup regions by name
-        Iterator<TextureAtlas.AtlasRegion> i = regions.iterator();
-        while (i.hasNext()) {
-            TextureAtlas.AtlasRegion tmp = i.next(); // must be called before you can call i.remove()
-            if(!tmp.name.contains(sVo.animationName)) {
-                i.remove();
-            }
-        }
-
         ResolutionEntryVO resolutionEntryVO = rm.getLoadedResolution();
         ProjectInfoVO projectInfoVO = rm.getProjectVO();
         float multiplier = resolutionEntryVO.getMultiplier(rm.getProjectVO().originalResolution);

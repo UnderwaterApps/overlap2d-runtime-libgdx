@@ -40,7 +40,7 @@ public class EntityFactory {
 	public World world;
 	public IResourceRetriever rm = null;
 
-	private ComponentFactory compositeComponentFactory, lightComponentFactory, particleEffectComponentFactory,
+	protected ComponentFactory compositeComponentFactory, lightComponentFactory, particleEffectComponentFactory,
 			simpleImageComponentFactory, spriteComponentFactory, spriterComponentFactory, labelComponentFactory, ninePatchComponentFactory, colorPrimitiveFactory;
 
 	private HashMap<Integer, ComponentFactory> externalFactories = new HashMap<Integer, ComponentFactory>();
