@@ -36,6 +36,7 @@ import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -63,6 +64,15 @@ public class SpriteComponentFactory extends ComponentFactory {
 
         SpriteAnimationVO sVo = (SpriteAnimationVO) vo;
         Array<TextureAtlas.AtlasRegion> regions = rm.getSpriteAnimation(sVo.animationName).getRegions();
+
+        // cleanup regions by name
+        Iterator<TextureAtlas.AtlasRegion> i = regions.iterator();
+        while (i.hasNext()) {
+            TextureAtlas.AtlasRegion tmp = i.next(); // must be called before you can call i.remove()
+            if(!tmp.name.contains(sVo.animationName)) {
+                i.remove();
+            }
+        }
 
         ResolutionEntryVO resolutionEntryVO = rm.getLoadedResolution();
         ProjectInfoVO projectInfoVO = rm.getProjectVO();
