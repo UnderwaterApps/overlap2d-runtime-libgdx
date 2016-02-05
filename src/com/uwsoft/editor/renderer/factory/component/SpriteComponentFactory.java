@@ -63,7 +63,7 @@ public class SpriteComponentFactory extends ComponentFactory {
         DimensionsComponent component = new DimensionsComponent();
 
         SpriteAnimationVO sVo = (SpriteAnimationVO) vo;
-        Array<TextureAtlas.AtlasRegion> regions = rm.getSpriteAnimation(sVo.animationName).getRegions();
+        Array<TextureAtlas.AtlasRegion> regions = getRegions(sVo.animationName);
 
         ResolutionEntryVO resolutionEntryVO = rm.getLoadedResolution();
         ProjectInfoVO projectInfoVO = rm.getProjectVO();
@@ -95,13 +95,7 @@ public class SpriteComponentFactory extends ComponentFactory {
         if(vo.playMode == 6) spriteAnimationComponent.playMode = Animation.PlayMode.NORMAL;
 
         // filtering regions by name
-        Array<TextureAtlas.AtlasRegion> allRegions = rm.getSpriteAnimation(spriteAnimationComponent.animationName).getRegions();
-        Array<TextureAtlas.AtlasRegion> regions = new Array<TextureAtlas.AtlasRegion>();
-        for(TextureAtlas.AtlasRegion region: allRegions) {
-            if(region.name.contains(vo.animationName)) {
-                regions.add(region);
-            }
-        }
+        Array<TextureAtlas.AtlasRegion> regions = getRegions(spriteAnimationComponent.animationName);
 
         AnimationComponent animationComponent = new AnimationComponent();
         SpriteAnimationStateComponent stateComponent = new SpriteAnimationStateComponent(regions);
@@ -127,5 +121,18 @@ public class SpriteComponentFactory extends ComponentFactory {
         entity.add(spriteAnimationComponent);
 
         return spriteAnimationComponent;
+    }
+
+    private Array<TextureAtlas.AtlasRegion> getRegions(String filter) {
+        // filtering regions by name
+        Array<TextureAtlas.AtlasRegion> allRegions = rm.getSpriteAnimation(filter).getRegions();
+        Array<TextureAtlas.AtlasRegion> regions = new Array<TextureAtlas.AtlasRegion>();
+        for(TextureAtlas.AtlasRegion region: allRegions) {
+            if(region.name.contains(filter)) {
+                regions.add(region);
+            }
+        }
+
+        return regions;
     }
 }
