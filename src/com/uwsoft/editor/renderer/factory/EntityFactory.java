@@ -197,13 +197,14 @@ public class EntityFactory {
 		Entity entity = new Entity();
 
 		compositeComponentFactory.createComponents(null, entity, vo);
-		CompositeTransformComponent compositeTransform = new CompositeTransformComponent();
+//		CompositeTransformComponent compositeTransform = new CompositeTransformComponent();
 		TransformComponent transform = new TransformComponent();
 
 		ViewPortComponent viewPortComponent = new ViewPortComponent();
 		viewPortComponent.viewPort = viewport;
 
 		//TODO: not sure if this line is okay
+        //without this line the editor won't load
 		viewPortComponent.viewPort.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 
 		entity.add(transform);

@@ -13,8 +13,10 @@ public class PhysicsBodyLoader {
 
     public float scale;
 
-    private PhysicsBodyLoader() {
+    public float mul;
 
+    private PhysicsBodyLoader() {
+        mul = 20f;
     }
 
     public static PhysicsBodyLoader getInstance() {
@@ -26,14 +28,14 @@ public class PhysicsBodyLoader {
     }
 
     public void setScaleFromPPWU(float pixelPerWU) {
-        scale = 1f/(20f*pixelPerWU);
+        scale = 1f/(mul*pixelPerWU);
     }
 
     public static float getScale() {
         return getInstance().scale;
     }
 
-    public Body createBody(World world, PhysicsBodyComponent physicsComponent, Vector2[][] minPolygonData, Vector2 mulVec) {
+    public Body createBody(World world, PhysicsBodyComponent physicsComponent, Vector2[][] minPolygonData, Vector2 mulVec, float rotationRad) {
 
         FixtureDef fixtureDef = new FixtureDef();
 
@@ -71,8 +73,24 @@ public class PhysicsBodyLoader {
         for(int i = 0; i < minPolygonData.length; i++) {
         	float[] verts = new float[minPolygonData[i].length * 2];
         	for(int j=0;j<verts.length;j+=2){
-        		verts[j] = minPolygonData[i][j/2].x * mulVec.x * scale;
-        		verts[j+1] = minPolygonData[i][j/2].y * mulVec.y * scale;
+                float tempX = minPolygonData[i][j / 2].x;
+                float tempY = minPolygonData[i][j/2].y;
+
+                minPolygonData[i][j/2].x -= physicsComponent.centerX;
+                minPolygonData[i][j/2].y -= physicsComponent.centerY;
+
+                minPolygonData[i][j/2].x *= mulVec.x;
+                minPolygonData[i][j/2].y *= mulVec.y;
+
+        		verts[j] = (minPolygonData[i][j/2].x * (float)Math.cos(rotationRad) - minPolygonData[i][j/2].y * (float)Math.sin(rotationRad)) * scale ;
+        		verts[j+1] = (minPolygonData[i][j/2].x * (float)Math.sin(rotationRad) + minPolygonData[i][j/2].y * (float)Math.cos(rotationRad)) * scale;
+
+                verts[j] += physicsComponent.centerX * scale;
+                verts[j+1] += physicsComponent.centerY * scale;
+
+                minPolygonData[i][j / 2].x = tempX;
+                minPolygonData[i][j/2].y = tempY;
+
         	}
             polygonShape.set(verts);
             fixtureDef.shape = polygonShape;

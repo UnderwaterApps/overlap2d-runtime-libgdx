@@ -24,6 +24,9 @@ public class PhysicsBodyComponent implements Component {
 	public float restitution;
     public Filter filter;
 
+    public float centerX;
+    public float centerY;
+
     public Body body;
 
     public PhysicsBodyComponent() {
