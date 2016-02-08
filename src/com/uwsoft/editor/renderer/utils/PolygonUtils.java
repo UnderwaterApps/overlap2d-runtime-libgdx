@@ -37,7 +37,7 @@ public class PolygonUtils {
         uniqueEdges.removeAll(duplicateEdges);
 
         Array<Vector2[]> result = new Array<Vector2[]>();
-        while(uniqueEdges.size() > 0) {
+        while(!uniqueEdges.isEmpty()) {
             Vector2[] mesh = extractClosedLoop(uniqueEdges);
             mesh = clearUnnecessaryVertices(mesh);
             result.add(mesh);
@@ -74,10 +74,10 @@ public class PolygonUtils {
         Edge edge = (Edge) edges.toArray()[0];
         edges.remove(edge);
         sortedList.add(edge);
-        while(edges.size() > 0) {
+        while(!edges.isEmpty()) {
             boolean result2 = false;
             boolean result1 = appendNextEdge(sortedList, edges);
-            if(edges.size() > 0) {
+            if(!edges.isEmpty()) {
                 result2 = appendPrevEdge(sortedList, edges);
             }
             if(!result1 && !result2) {
