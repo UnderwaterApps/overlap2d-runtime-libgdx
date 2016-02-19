@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -30,6 +31,17 @@ public class PhysicsSystem extends IteratingSystem {
 	}
 
 	@Override
+	public void update (float deltaTime) {
+		for (int i = 0; i < getEntities().size(); ++i) {
+			processEntity(getEntities().get(i), deltaTime);
+		}
+
+		if (world != null && isPhysicsOn) {
+			doPhysicsStep(deltaTime);
+		}
+	}
+
+	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
 		TransformComponent transformComponent =  transformComponentMapper.get(entity);
 
@@ -37,13 +49,9 @@ public class PhysicsSystem extends IteratingSystem {
 
 		PhysicsBodyComponent physicsBodyComponent = ComponentRetriever.get(entity, PhysicsBodyComponent.class);
 		Body body = physicsBodyComponent.body;
-		transformComponent.x = body.getPosition().x/ PhysicsBodyLoader.getScale();
-		transformComponent.y = body.getPosition().y/ PhysicsBodyLoader.getScale();
-//		transformComponent.rotation = body.getAngle() * MathUtils.radiansToDegrees;
-
-		if (world != null && isPhysicsOn) {
-			doPhysicsStep(deltaTime);
-		}
+		transformComponent.x = body.getPosition().x / PhysicsBodyLoader.getScale() - transformComponent.originX;
+		transformComponent.y = body.getPosition().y / PhysicsBodyLoader.getScale() - transformComponent.originY;
+		transformComponent.rotation = body.getAngle() * MathUtils.radiansToDegrees;
 	}
 
 	protected void processBody(Entity entity) {
@@ -65,10 +73,8 @@ public class PhysicsSystem extends IteratingSystem {
             physicsBodyComponent.centerY = dimensionsComponent.height/2;
 
 			PhysicsBodyComponent bodyPropertiesComponent = ComponentRetriever.get(entity, PhysicsBodyComponent.class);
-			physicsBodyComponent.body = PhysicsBodyLoader.getInstance().createBody(world, bodyPropertiesComponent, polygonComponent.vertices, new Vector2(transformComponent.scaleX, transformComponent.scaleY),
-                    transformComponent.rotation * MathUtils.degreesToRadians);
+			physicsBodyComponent.body = PhysicsBodyLoader.getInstance().createBody(world, bodyPropertiesComponent, polygonComponent.vertices, transformComponent);
 
-            physicsBodyComponent.body.setTransform(new Vector2(transformComponent.x * PhysicsBodyLoader.getScale(), transformComponent.y * PhysicsBodyLoader.getScale()), physicsBodyComponent.body.getAngle());
 			physicsBodyComponent.body.setUserData(entity);
 		}
 	}
