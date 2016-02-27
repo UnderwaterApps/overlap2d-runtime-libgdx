@@ -132,14 +132,6 @@ public class Overlap2dRenderer extends IteratingSystem {
 			}
 		} else {
 			// No transform for this group, offset each child.
-			TransformComponent compositeTransform = transformMapper.get(rootEntity);
-			
-			float offsetX = compositeTransform.x, offsetY = compositeTransform.y;
-			
-			if(viewPortMapper.has(rootEntity)){
-				offsetX = 0;
-				offsetY = 0;
-			}
 			
 			for (int i = 0, n = nodeComponent.children.size; i < n; i++) {
 				Entity child = children[i];
@@ -155,11 +147,6 @@ public class Overlap2dRenderer extends IteratingSystem {
 				if(!childMainItemComponent.visible){
 					continue;
 				}
-
-				TransformComponent childTransformComponent = transformMapper.get(child);
-				float cx = childTransformComponent.x, cy = childTransformComponent.y;
-				childTransformComponent.x = cx + offsetX;
-				childTransformComponent.y = cy + offsetY;
 				
 				NodeComponent childNodeComponent = nodeMapper.get(child);
 				int entityType = mainItemComponentMapper.get(child).entityType;
@@ -171,8 +158,6 @@ public class Overlap2dRenderer extends IteratingSystem {
 					//Step into Composite
 					drawRecursively(child, parentAlpha);
 				}
-				childTransformComponent.x = cx;
-				childTransformComponent.y = cy;
 			}
 		}
 		nodeComponent.children.end();

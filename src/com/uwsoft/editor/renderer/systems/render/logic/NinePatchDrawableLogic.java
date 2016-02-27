@@ -29,7 +29,7 @@ public class NinePatchDrawableLogic implements Drawable {
 		NinePatchComponent entityNinePatchComponent = ninePatchMapper.get(entity);
 		batch.setColor(tintComponent.color);
 
-		entityNinePatchComponent.ninePatch.draw(batch, entityTransformComponent.x, entityTransformComponent.y, entityDimensionsComponent.width, entityDimensionsComponent.height);
+		entityNinePatchComponent.ninePatch.draw(batch, entityTransformComponent.offsetX, entityTransformComponent.offsetY, entityDimensionsComponent.width, entityDimensionsComponent.height);
 	}
 
 }

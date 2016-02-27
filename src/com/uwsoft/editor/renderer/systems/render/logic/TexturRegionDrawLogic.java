@@ -71,7 +71,7 @@ public class TexturRegionDrawLogic implements Drawable {
         batch.setColor(tintComponent.color.r, tintComponent.color.g, tintComponent.color.b, tintComponent.color.a * parentAlpha);
 
         batch.draw(entityTextureRegionComponent.region,
-                entityTransformComponent.x, entityTransformComponent.y,
+                entityTransformComponent.offsetX, entityTransformComponent.offsetY,
                 entityTransformComponent.originX, entityTransformComponent.originY,
                 dimensionsComponent.width, dimensionsComponent.height,
                 entityTransformComponent.scaleX, entityTransformComponent.scaleY,
