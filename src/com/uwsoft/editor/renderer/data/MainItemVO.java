@@ -37,7 +37,7 @@ public class MainItemVO {
 		uniqueId = vo.uniqueId;
 		itemIdentifier = new String(vo.itemIdentifier);
 		itemName = new String(vo.itemName);
-        if(tags != null) tags = Arrays.copyOf(vo.tags, vo.tags.length);
+        if(vo.tags != null) tags = Arrays.copyOf(vo.tags, vo.tags.length);
         customVars = new String(vo.customVars);
 		x = vo.x; 
 		y = vo.y;
