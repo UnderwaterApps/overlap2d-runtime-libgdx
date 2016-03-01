@@ -152,6 +152,7 @@ public class CompositeActor extends Group {
 
     protected void processMain(Actor actor, MainItemVO vo) {
 
+        actor.setName(vo.itemIdentifier);
         buildCoreData(actor, vo);
 
         //actor properties
