@@ -24,19 +24,21 @@ import com.uwsoft.editor.renderer.utils.MySkin;
  * The main logic is to prepare list of resources that needs to be load for specified scenes, and then loaded.
  *
  * Created by azakhary on 9/9/2014.
+ * @author  azakhary
+ * @author  Evan Lindsay
  */
 public class ResourceManager implements IResourceLoader, IResourceRetriever {
 
     /**
      *  Paths (please change if different) this is the default structure exported from editor
      */
-    public String packResolutionName = "orig";
-
+    public String resolutionPath = "orig";
     public String scenesPath = "scenes";
     public String particleEffectsPath = "particles";
     public String spriteAnimationsPath = "sprite_animations";
-    public String spriterAnimationsPath = "spriter_animations";
-    public String spineAnimationsPath = "spine_animations";
+    public String spriterAnimationsPath = "spriter-animations";
+    public String spineAnimationsPath = "spine-animations";
+    public String packPath = "pack";
     public String fontsPath = "freetypefonts";
     public String shadersPath = "shaders";
 
@@ -80,7 +82,7 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
     public void setWorkingResolution(String resolution) {
         ResolutionEntryVO resolutionObject = getProjectVO().getResolution(resolution);
         if(resolutionObject != null) {
-            packResolutionName = resolution;
+            resolutionPath = resolution;
         }
     }
 
@@ -208,7 +210,7 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
 
     @Override
     public void loadAtlasPack() {
-        FileHandle packFile = Gdx.files.internal(packResolutionName + File.separator + "pack.atlas");
+        FileHandle packFile = Gdx.files.internal(resolutionPath + File.separator + packPath + File.separator + "pack.atlas");
         if (!packFile.exists()) {
             return;
         }
@@ -242,7 +244,7 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
         }
 
         for (String name : spriteAnimNamesToLoad) {
-            TextureAtlas animAtlas = new TextureAtlas(Gdx.files.internal(packResolutionName + File.separator + spriteAnimationsPath + File.separator + name + File.separator + name + ".atlas"));
+            TextureAtlas animAtlas = new TextureAtlas(Gdx.files.internal(resolutionPath + File.separator + spriteAnimationsPath + File.separator + name + File.separator + name + ".atlas"));
             spriteAnimations.put(name, animAtlas);
         }
     }
@@ -255,16 +257,16 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
     		}
     	}
     	for (String name : spriterAnimNamesToLoad) {
-    		FileHandle animFile = Gdx.files.internal("orig" + File.separator + spriterAnimationsPath + File.separator + name + File.separator + name + ".scml");
+    		FileHandle animFile = Gdx.files.internal(resolutionPath + File.separator + spriterAnimationsPath + File.separator + name + File.separator + name + ".scml");
     		spriterAnimations.put(name, animFile);
     	}
     }
     
 
     public void loadSpineAnimation(String name) {
-        TextureAtlas animAtlas = new TextureAtlas(Gdx.files.internal(packResolutionName + File.separator + spineAnimationsPath + File.separator + name + File.separator + name + ".atlas"));
+        TextureAtlas animAtlas = new TextureAtlas(Gdx.files.internal(resolutionPath + File.separator + spineAnimationsPath + File.separator + name + File.separator + name + ".atlas"));
         skeletonAtlases.put(name, animAtlas);
-        skeletonJSON.put(name, Gdx.files.internal("orig"+ File.separator + spineAnimationsPath + File.separator + name + File.separator + name + ".json"));
+        skeletonJSON.put(name, Gdx.files.internal(resolutionPath + File.separator + spineAnimationsPath + File.separator + name + File.separator + name + ".json"));
     }
   
 
@@ -291,9 +293,9 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
     @Override
     public void loadFonts() {
     	//resolution related stuff
-    	ResolutionEntryVO curResolution = getProjectVO().getResolution(packResolutionName);
+    	ResolutionEntryVO curResolution = getProjectVO().getResolution(resolutionPath);
         resMultiplier = 1;
-    	if(!packResolutionName.equals("orig")) {
+    	if(!resolutionPath.equals("orig")) {
     		if(curResolution.base == 0) {
                 resMultiplier = (float) curResolution.width / (float) getProjectVO().originalResolution.width;
     		} else{
@@ -419,10 +421,10 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
 
     @Override
     public ResolutionEntryVO getLoadedResolution() {
-        if(packResolutionName.equals("orig")) {
+        if(resolutionPath.equals("orig")) {
             return getProjectVO().originalResolution;
         }
-        return getProjectVO().getResolution(packResolutionName);
+        return getProjectVO().getResolution(resolutionPath);
     }
 
     public void dispose() {
