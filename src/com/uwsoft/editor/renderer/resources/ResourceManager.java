@@ -35,7 +35,7 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
     public String resolutionPath = "orig";
     public String scenesPath = "scenes";
     public String particleEffectsPath = "particles";
-    public String spriteAnimationsPath = "sprite_animations";
+    public String spriteAnimationsPath = "sprite-animations";
     public String spriterAnimationsPath = "spriter-animations";
     public String spineAnimationsPath = "spine-animations";
     public String packPath = "pack";
