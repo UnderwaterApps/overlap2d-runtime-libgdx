@@ -33,8 +33,6 @@ public class Actions {
         registerActionClass(ColorAction.class);
         registerActionClass(AlphaAction.class);
 
-        registerActionClass(ForceAction.class);
-
         registerActionClass(RunnableAction.class);
         registerActionClass(DelayAction.class);
 
@@ -45,7 +43,9 @@ public class Actions {
     }
 
     public static <T extends ActionLogic> void registerActionClass(Class<T> type) throws IllegalAccessException, InstantiationException {
-        actionLogicMap.put(type.getName(), type.newInstance());
+        if (!actionLogicMap.containsKey(type.getName())) {
+            actionLogicMap.put(type.getName(), type.newInstance());
+        }
     }
 
     private static void checkInit() {
@@ -239,47 +239,6 @@ public class Actions {
         return delayData;
     }
 
-    /**
-     * Apply a force to an entity with physics component. The force is applied as long as
-     * the corresponding entity as a physics component.
-     * @param force The world force vector, usually in Newtons (N)
-     * @return The com.uwsoft.editor.renderer.systems.action.data.ForceData object
-     */
-    public static ForceData force(Vector2 force) {
-        ForceData forceData = new ForceData(force);
-
-        forceData.logicClassName = ForceAction.class.getName();
-        return forceData;
-    }
-
-    /**
-     * Apply a force to an entity with physics component. The force is applied as long as
-     * the corresponding entity as a physics component.
-     * @param force The world force vector, usually in Newtons (N)
-     * @param relativePoint The point where the force is applied relative to the body origin
-     * @return The com.uwsoft.editor.renderer.systems.action.data.ForceData object
-     */
-    public static ForceData force(Vector2 force, Vector2 relativePoint) {
-        ForceData forceData = new ForceData(force, relativePoint);
-
-        forceData.logicClassName = ForceAction.class.getName();
-        return forceData;
-    }
-
-    /**
-     * Apply a force to an entity with physics component.
-     * @param force The world force vector, usually in Newtons (N)
-     * @param relativePoint The point where the force is applied relative to the body origin
-     * @param linkedComponent The force is applied as long as the corresponding entity
-     *                        has this component
-     * @return The com.uwsoft.editor.renderer.systems.action.data.ForceData object
-     */
-    public static ForceData force(Vector2 force, Vector2 relativePoint, Class<? extends Component> linkedComponent) {
-        ForceData forceData = force(force, relativePoint);
-
-        forceData.linkedComponentMapper = ComponentMapper.getFor(linkedComponent);
-        return forceData;
-    }
 
     static public ParallelData parallel(ActionData... actionDatas) {
         ParallelData actionData = new ParallelData(actionDatas);
