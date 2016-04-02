@@ -188,19 +188,19 @@ public class CompositeVO {
     }
 
     public boolean isEmpty() {
-        return sComposites.size() == 0 &&
-                sImage9patchs.size() == 0 &&
-                sImages.size() == 0 &&
-                sSpriteAnimations.size() == 0 &&
-                sLabels.size() == 0 &&
-                sLights.size() == 0 &&
-                sParticleEffects.size() == 0 &&
-                sSpriteAnimations.size() == 0 &&
-                sSpriterAnimations.size() == 0 &&
-                sSpineAnimations.size() == 0 &&
-                sSelectBoxes.size() == 0 &&
-                sTextBox.size() == 0 &&
-                sColorPrimitives.size() == 0;
+        return sComposites.isEmpty() &&
+                sImage9patchs.isEmpty() &&
+                sImages.isEmpty() &&
+                sSpriteAnimations.isEmpty() &&
+                sLabels.isEmpty() &&
+                sLights.isEmpty() &&
+                sParticleEffects.isEmpty() &&
+                sSpriteAnimations.isEmpty() &&
+                sSpriterAnimations.isEmpty() &&
+                sSpineAnimations.isEmpty() &&
+                sSelectBoxes.isEmpty() &&
+                sTextBox.isEmpty() &&
+                sColorPrimitives.isEmpty();
     }
 
     public String[] getRecursiveParticleEffectsList() {
