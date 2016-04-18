@@ -35,23 +35,7 @@ public class TexturRegionDrawLogic implements Drawable {
 	public void draw(Batch batch, Entity entity, float parentAlpha) {
         TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
         if(shaderComponentMapper.has(entity)){
-			ShaderComponent shaderComponent = shaderComponentMapper.get(entity);
-            if(shaderComponent.getShader() != null) {
-                batch.setShader(shaderComponent.getShader());
 
-                batch.getShader().setUniformf("deltaTime", Gdx.graphics.getDeltaTime());
-                batch.getShader().setUniformf("time", Overlap2dRenderer.timeRunning);
-
-                GL20 gl = Gdx.gl20;
-                int error;
-                if ((error = gl.glGetError()) != GL20.GL_NO_ERROR) {
-                    Gdx.app.log("opengl", "Error: " + error);
-                    Gdx.app.log("opengl", shaderComponent.getShader().getLog());
-                    //throw new RuntimeException( ": glError " + error);
-                }
-            }
-		}
-        
         if(entityTextureRegionComponent.polygonSprite != null) {
             drawTiledPolygonSprite(batch, entity);
         } else {
