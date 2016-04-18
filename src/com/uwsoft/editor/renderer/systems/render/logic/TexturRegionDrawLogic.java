@@ -34,7 +34,6 @@ public class TexturRegionDrawLogic implements Drawable {
 	@Override
 	public void draw(Batch batch, Entity entity, float parentAlpha) {
         TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
-        if(shaderComponentMapper.has(entity)){
 
         if(entityTextureRegionComponent.polygonSprite != null) {
             drawTiledPolygonSprite(batch, entity);
