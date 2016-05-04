@@ -1,8 +1,11 @@
 package com.uwsoft.editor.renderer.systems.action;
 
+import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.renderer.components.ActionComponent;
 import com.uwsoft.editor.renderer.systems.action.data.*;
 import com.uwsoft.editor.renderer.systems.action.logic.*;
@@ -40,7 +43,9 @@ public class Actions {
     }
 
     public static <T extends ActionLogic> void registerActionClass(Class<T> type) throws IllegalAccessException, InstantiationException {
-        actionLogicMap.put(type.getName(), type.newInstance());
+        if (!actionLogicMap.containsKey(type.getName())) {
+            actionLogicMap.put(type.getName(), type.newInstance());
+        }
     }
 
     private static void checkInit() {
@@ -233,6 +238,7 @@ public class Actions {
         delayData.logicClassName = DelayAction.class.getName();
         return delayData;
     }
+
 
     static public ParallelData parallel(ActionData... actionDatas) {
         ParallelData actionData = new ParallelData(actionDatas);
