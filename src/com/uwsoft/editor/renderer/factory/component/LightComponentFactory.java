@@ -55,8 +55,8 @@ public class LightComponentFactory extends ComponentFactory {
     @Override
     protected DimensionsComponent createDimensionsComponent(Entity entity, MainItemVO vo) {
         DimensionsComponent component = new DimensionsComponent();
-        ProjectInfoVO projectInfoVO = rm.getProjectVO();
-        component.boundBox = new Rectangle(-10f/projectInfoVO.pixelToWorld, -10f/projectInfoVO.pixelToWorld, 20f/projectInfoVO.pixelToWorld, 20f/projectInfoVO.pixelToWorld);
+        float boundBoxSize = 10f;
+        component.boundBox = new Rectangle(-boundBoxSize / 2f, -boundBoxSize / 2f, boundBoxSize, boundBoxSize);
 
         entity.add(component);
         return component;
