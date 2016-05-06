@@ -27,6 +27,7 @@ public class Overlap2dRenderer extends IteratingSystem {
 	private ComponentMapper<ParentNodeComponent> parentNodeMapper = ComponentMapper.getFor(ParentNodeComponent.class);
 	private ComponentMapper<TransformComponent> transformMapper = ComponentMapper.getFor(TransformComponent.class);
 	private ComponentMapper<MainItemComponent> mainItemComponentMapper = ComponentMapper.getFor(MainItemComponent.class);
+	private ComponentMapper<ShaderComponent> shaderComponentComponentMapper = ComponentMapper.getFor(ShaderComponent.class);
 	
 	private DrawableLogicMapper drawableLogicMapper;
 	private RayHandler rayHandler;
@@ -79,7 +80,12 @@ public class Overlap2dRenderer extends IteratingSystem {
 		//currentComposite = rootEntity;
 		CompositeTransformComponent curCompositeTransformComponent = compositeTransformMapper.get(rootEntity);
 		TransformComponent transform = transformMapper.get(rootEntity);
+		ShaderComponent shaderComponent = shaderComponentComponentMapper.get(rootEntity);
 		
+		boolean shaderExist = shaderComponent!=null && shaderComponent.getShader()!=null;
+		if(shaderExist){
+			batch.setShader(shaderComponent.getShader());
+		}
 		
 		if (curCompositeTransformComponent.transform || transform.rotation != 0 || transform.scaleX !=1 || transform.scaleY !=1){
 			MainItemComponent childMainItemComponent = mainItemComponentMapper.get(rootEntity);
@@ -95,6 +101,10 @@ public class Overlap2dRenderer extends IteratingSystem {
 		drawChildren(rootEntity, batch, curCompositeTransformComponent, parentAlpha);
 		if (curCompositeTransformComponent.transform || transform.rotation != 0 || transform.scaleX !=1 || transform.scaleY !=1)
 			resetTransform(rootEntity, batch);
+			
+		if(shaderExist){
+			batch.setShader(null);
+		}
 	}
 
 	private void drawChildren(Entity rootEntity, Batch batch, CompositeTransformComponent curCompositeTransformComponent, float parentAlpha) {
