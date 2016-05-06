@@ -53,8 +53,9 @@ public class ParticleEffectComponentFactory extends ComponentFactory {
     protected DimensionsComponent createDimensionsComponent(Entity entity, MainItemVO vo) {
         DimensionsComponent component = new DimensionsComponent();
 
-        float boundBoxSize = 10f;
-        component.boundBox = new Rectangle(-boundBoxSize / 2f, -boundBoxSize / 2f, boundBoxSize, boundBoxSize);
+        ProjectInfoVO projectInfoVO = rm.getProjectVO();
+        float boundBoxSize = 70f;
+        component.boundBox = new Rectangle((-boundBoxSize / 2f) / projectInfoVO.pixelToWorld, (-boundBoxSize / 2f) / projectInfoVO.pixelToWorld, boundBoxSize / projectInfoVO.pixelToWorld, boundBoxSize / projectInfoVO.pixelToWorld);
 
         entity.add(component);
         return component;
