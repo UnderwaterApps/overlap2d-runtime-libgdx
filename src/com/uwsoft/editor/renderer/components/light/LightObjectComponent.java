@@ -8,10 +8,6 @@ import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 
 public class LightObjectComponent implements Component {
 	private LightType type;
-	
-	public LightObjectComponent(LightType type) {
-		this.type = type;
-	}
 
 	public int rays = 12;
 	public float distance = 300;
@@ -21,6 +17,10 @@ public class LightObjectComponent implements Component {
 	public boolean isStatic = true;
 	public boolean isXRay = true;
 	public Light lightObject = null;
+
+	public LightObjectComponent(LightType type) {
+		this.type = type;
+	}
 
 	public LightType getType(){
 		return type;
