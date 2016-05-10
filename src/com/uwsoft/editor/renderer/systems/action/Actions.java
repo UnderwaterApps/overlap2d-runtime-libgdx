@@ -40,7 +40,9 @@ public class Actions {
     }
 
     public static <T extends ActionLogic> void registerActionClass(Class<T> type) throws IllegalAccessException, InstantiationException {
-        actionLogicMap.put(type.getName(), type.newInstance());
+        if (!actionLogicMap.containsKey(type.getName())) {
+            actionLogicMap.put(type.getName(), type.newInstance());
+        }
     }
 
     private static void checkInit() {
@@ -57,7 +59,7 @@ public class Actions {
         return moveTo(x, y, duration, null);
     }
 
-    public static ActionData moveTo(float x, float y, float duration, Interpolation interpolation){
+    public static ActionData moveTo(float x, float y, float duration, Interpolation interpolation) {
         MoveToData actionData = new MoveToData(
                 interpolation,
                 duration,
@@ -72,7 +74,7 @@ public class Actions {
         return moveBy(x, y, duration, null);
     }
 
-    public static ActionData moveBy(float x, float y, float duration, Interpolation interpolation){
+    public static ActionData moveBy(float x, float y, float duration, Interpolation interpolation) {
         MoveByData actionData = new MoveByData(
                 interpolation,
                 duration,
@@ -83,7 +85,7 @@ public class Actions {
         return actionData;
     }
 
-    static public ActionData run (Runnable runnable) {
+    static public ActionData run(Runnable runnable) {
         RunnableData actionData = new RunnableData(
                 runnable
         );
@@ -111,7 +113,7 @@ public class Actions {
     }
 
     static public RotateByData rotateBy(float amount, float duration, Interpolation interpolation) {
-        RotateByData actionData =  new RotateByData(
+        RotateByData actionData = new RotateByData(
                 interpolation,
                 duration,
                 amount
@@ -120,11 +122,11 @@ public class Actions {
         return actionData;
     }
 
-    public static SizeToData sizeTo (float width, float height, float duration) {
+    public static SizeToData sizeTo(float width, float height, float duration) {
         return sizeTo(width, height, duration, null);
     }
 
-    public static SizeToData sizeTo (float width, float height, float duration, Interpolation interpolation) {
+    public static SizeToData sizeTo(float width, float height, float duration, Interpolation interpolation) {
         SizeToData actionData = new SizeToData(
                 interpolation,
                 duration,
@@ -135,11 +137,11 @@ public class Actions {
         return actionData;
     }
 
-    public static SizeByData sizeBy (float width, float height, float duration) {
+    public static SizeByData sizeBy(float width, float height, float duration) {
         return sizeBy(width, height, duration, null);
     }
 
-    public static SizeByData sizeBy (float width, float height, float duration, Interpolation interpolation) {
+    public static SizeByData sizeBy(float width, float height, float duration, Interpolation interpolation) {
         SizeByData actionData = new SizeByData(
                 interpolation,
                 duration,
@@ -150,11 +152,11 @@ public class Actions {
         return actionData;
     }
 
-    public static ScaleToData scaleTo (float width, float height, float duration) {
+    public static ScaleToData scaleTo(float width, float height, float duration) {
         return scaleTo(width, height, duration, null);
     }
 
-    public static ScaleToData scaleTo (float width, float height, float duration, Interpolation interpolation) {
+    public static ScaleToData scaleTo(float width, float height, float duration, Interpolation interpolation) {
         ScaleToData actionData = new ScaleToData(
                 interpolation,
                 duration,
@@ -165,11 +167,11 @@ public class Actions {
         return actionData;
     }
 
-    public static ScaleByData scaleBy (float width, float height, float duration) {
+    public static ScaleByData scaleBy(float width, float height, float duration) {
         return scaleBy(width, height, duration, null);
     }
 
-    public static ScaleByData scaleBy (float width, float height, float duration, Interpolation interpolation) {
+    public static ScaleByData scaleBy(float width, float height, float duration, Interpolation interpolation) {
         ScaleByData actionData = new ScaleByData(
                 interpolation,
                 duration,
@@ -181,11 +183,11 @@ public class Actions {
     }
 
 
-    public static ColorData color (Color color, float duration) {
+    public static ColorData color(Color color, float duration) {
         return color(color, duration, null);
     }
 
-    public static ColorData color (Color color, float duration, Interpolation interpolation) {
+    public static ColorData color(Color color, float duration, Interpolation interpolation) {
         ColorData colorData = new ColorData(
                 interpolation,
                 duration,
@@ -195,44 +197,45 @@ public class Actions {
         return colorData;
     }
 
-    public static AlphaData alpha (float alpha, float duration) {
+    public static AlphaData alpha(float alpha, float duration) {
         return alpha(alpha, duration, null);
     }
 
-    public static AlphaData alpha (float alpha, float duration, Interpolation interpolation) {
+    public static AlphaData alpha(float alpha, float duration, Interpolation interpolation) {
         AlphaData alphaData = new AlphaData(
                 interpolation,
                 duration,
                 alpha
         );
         alphaData.logicClassName = AlphaAction.class.getName();
-        return  alphaData;
+        return alphaData;
     }
 
-    public static AlphaData fadeIn (float duration) {
+    public static AlphaData fadeIn(float duration) {
         return alpha(1, duration, null);
     }
 
-    public static AlphaData fadeIn (float duration, Interpolation interpolation) {
+    public static AlphaData fadeIn(float duration, Interpolation interpolation) {
         return alpha(1, duration, interpolation);
     }
 
 
-    public static AlphaData fadeOut (float duration) {
+    public static AlphaData fadeOut(float duration) {
         return alpha(0, duration, null);
     }
 
-    public static AlphaData fadeOut (float duration, Interpolation interpolation) {
+    public static AlphaData fadeOut(float duration, Interpolation interpolation) {
         return alpha(0, duration, interpolation);
     }
 
-    public static DelayData delay (float duration) {
+    public static DelayData delay(float duration) {
         DelayData delayData = new DelayData(
                 duration
         );
         delayData.logicClassName = DelayAction.class.getName();
         return delayData;
     }
+
 
     static public ParallelData parallel(ActionData... actionDatas) {
         ParallelData actionData = new ParallelData(actionDatas);
@@ -246,7 +249,7 @@ public class Actions {
         return actionData;
     }
 
-    public static void addAction(final Entity entity, ActionData data){
+    public static void addAction(final Entity entity, ActionData data) {
         checkInit();
         ActionComponent actionComponent;
         actionComponent = ComponentRetriever.get(entity, ActionComponent.class);
@@ -261,8 +264,8 @@ public class Actions {
 
     public static void removeActions(Entity entity) {
         ActionComponent actionComponent = ComponentRetriever.get(entity, ActionComponent.class);
-        if (actionComponent != null){
-            entity.remove(ActionComponent.class);
+        if (actionComponent != null) {
+            actionComponent.dataArray.clear(); // action component with empty data array will be removed later by ActionSystem
         }
     }
 

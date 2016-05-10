@@ -34,7 +34,8 @@ public class TexturRegionDrawLogic implements Drawable {
 	@Override
 	public void draw(Batch batch, Entity entity, float parentAlpha) {
         TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
-        if(shaderComponentMapper.has(entity)){
+
+	if(shaderComponentMapper.has(entity)){
 			ShaderComponent shaderComponent = shaderComponentMapper.get(entity);
             if(shaderComponent.getShader() != null) {
                 batch.setShader(shaderComponent.getShader());
@@ -50,8 +51,8 @@ public class TexturRegionDrawLogic implements Drawable {
                     //throw new RuntimeException( ": glError " + error);
                 }
             }
-		}
-        
+	}
+
         if(entityTextureRegionComponent.polygonSprite != null) {
             drawTiledPolygonSprite(batch, entity);
         } else {

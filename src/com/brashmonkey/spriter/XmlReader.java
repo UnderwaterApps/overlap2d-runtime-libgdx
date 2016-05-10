@@ -287,7 +287,7 @@ public class XmlReader {
 				if (data[i] == '\n') lineNumber++;
 			throw new SpriterException("Error parsing XML on line " + lineNumber + " near: "
 				+ new String(data, p, Math.min(32, pe - p)));
-		} else if (elements.size() != 0) {
+		} else if (!elements.isEmpty()) {
 			Element element = elements.get(elements.size()-1);
 			elements.clear();
 			throw new SpriterException("Error parsing XML, unclosed element: " + element.getName());
@@ -404,7 +404,7 @@ public class XmlReader {
 	protected void close () {
 		root = elements.get(elements.size()-1);
 		elements.remove(elements.size()-1);
-		current = elements.size() > 0 ? elements.get(elements.size()-1) : null;
+		current = !elements.isEmpty() ? elements.get(elements.size()-1) : null;
 	}
 
 	static public class Element {
