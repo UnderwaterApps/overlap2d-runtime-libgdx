@@ -54,7 +54,7 @@ public class PhysicsBodyLoader {
         }
 
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set((transformComponent.x + transformComponent.originX) * PhysicsBodyLoader.getScale(), (transformComponent.y + transformComponent.originY) * PhysicsBodyLoader.getScale());
+        bodyDef.position.set((transformComponent.offsetX + transformComponent.originX) * PhysicsBodyLoader.getScale(), (transformComponent.offsetY + transformComponent.originY) * PhysicsBodyLoader.getScale());
         bodyDef.angle = transformComponent.rotation * MathUtils.degreesToRadians;
 
         bodyDef.awake = physicsComponent.awake;

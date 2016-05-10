@@ -5,6 +5,8 @@ import com.badlogic.ashley.core.Component;
 public class TransformComponent implements Component {
 	public float x; 
 	public float y;
+	public float offsetX;
+	public float offsetY;
 	public float scaleX	=	1f; 
 	public float scaleY	=	1f;
 	public float rotation;

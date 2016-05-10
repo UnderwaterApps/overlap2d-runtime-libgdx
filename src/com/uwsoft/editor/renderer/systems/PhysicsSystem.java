@@ -49,8 +49,8 @@ public class PhysicsSystem extends IteratingSystem {
 
 		PhysicsBodyComponent physicsBodyComponent = ComponentRetriever.get(entity, PhysicsBodyComponent.class);
 		Body body = physicsBodyComponent.body;
-		transformComponent.x = body.getPosition().x / PhysicsBodyLoader.getScale() - transformComponent.originX;
-		transformComponent.y = body.getPosition().y / PhysicsBodyLoader.getScale() - transformComponent.originY;
+		transformComponent.offsetX = body.getPosition().x / PhysicsBodyLoader.getScale() - transformComponent.originX;
+		transformComponent.offsetY = body.getPosition().y / PhysicsBodyLoader.getScale() - transformComponent.originY;
 		transformComponent.rotation = body.getAngle() * MathUtils.radiansToDegrees;
 	}
 

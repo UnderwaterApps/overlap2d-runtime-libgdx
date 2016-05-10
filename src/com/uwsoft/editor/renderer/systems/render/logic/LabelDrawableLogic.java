@@ -39,7 +39,7 @@ public class LabelDrawableLogic implements Drawable {
 
 		if (labelComponent.style.background != null) {
 			batch.setColor(tmpColor);
-			labelComponent.style.background.draw(batch, entityTransformComponent.x, entityTransformComponent.y, dimenstionsComponent.width, dimenstionsComponent.height);
+			labelComponent.style.background.draw(batch, entityTransformComponent.offsetX, entityTransformComponent.offsetY, dimenstionsComponent.width, dimenstionsComponent.height);
 			//System.out.println("LAbel BG");
 		}
 

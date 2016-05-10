@@ -27,7 +27,7 @@ public class SpriterDrawableLogic implements Drawable {
 		SpriterComponent spriter = spriterMapper.get(entity);
 		Player player = spriter.player;
 		
-		player.setPosition(entityTransformComponent.x, entityTransformComponent.y);
+		player.setPosition(entityTransformComponent.offsetX, entityTransformComponent.offsetY);
 		//TODO dimentions 
 		//player.setPivot(getWidth() / 2, getHeight() / 2);
 		player.setScale(spriter.scale );

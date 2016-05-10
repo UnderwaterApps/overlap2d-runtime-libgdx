@@ -21,7 +21,7 @@ public class ParticleDrawableLogic implements Drawable {
 		//batch.setTransformMatrix(matrix);
 		TransformComponent transformComponent = transformComponentMapper.get(entity);
 		//particleEffect.setPosition(transformComponent.x/particleComponent.worldMultiplyer, transformComponent.y/particleComponent.worldMultiplyer);
-		particleComponent.particleEffect.setPosition(transformComponent.x, transformComponent.y);
+		particleComponent.particleEffect.setPosition(transformComponent.offsetX, transformComponent.offsetY);
 		particleComponent.particleEffect.draw(batch);
 		//batch.setTransformMatrix(batch.getTransformMatrix().scl(1f/particleComponent.worldMultiplyer));
 	}

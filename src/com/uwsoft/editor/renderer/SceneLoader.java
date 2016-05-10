@@ -181,6 +181,7 @@ public class SceneLoader {
 		LightSystem lightSystem = new LightSystem();
 		SpriteAnimationSystem animationSystem = new SpriteAnimationSystem();
 		LayerSystem layerSystem = new LayerSystem();
+		TransformSystem transformSystem = new TransformSystem();
 		PhysicsSystem physicsSystem = new PhysicsSystem(world);
 		CompositeSystem compositeSystem = new CompositeSystem();
 		LabelSystem labelSystem = new LabelSystem();
@@ -194,6 +195,7 @@ public class SceneLoader {
 		engine.addSystem(particleSystem);
 		engine.addSystem(lightSystem);
 		engine.addSystem(layerSystem);
+		engine.addSystem(transformSystem);
 		engine.addSystem(physicsSystem);
 		engine.addSystem(compositeSystem);
 		engine.addSystem(labelSystem);
