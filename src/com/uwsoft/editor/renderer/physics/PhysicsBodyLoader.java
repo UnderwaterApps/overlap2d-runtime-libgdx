@@ -1,10 +1,12 @@
 package com.uwsoft.editor.renderer.physics;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
+import com.uwsoft.editor.renderer.utils.TransformMathUtils;
 
 /**
  * Created by azakhary on 9/28/2014.
@@ -37,7 +39,7 @@ public class PhysicsBodyLoader {
         return getInstance().scale;
     }
 
-    public Body createBody(World world, PhysicsBodyComponent physicsComponent, Vector2[][] minPolygonData, TransformComponent transformComponent) {
+    public Body createBody(World world, Entity entity, PhysicsBodyComponent physicsComponent, Vector2[][] minPolygonData, TransformComponent transformComponent) {
 
         FixtureDef fixtureDef = new FixtureDef();
 
@@ -54,7 +56,8 @@ public class PhysicsBodyLoader {
         }
 
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set((transformComponent.x + transformComponent.originX) * PhysicsBodyLoader.getScale(), (transformComponent.y + transformComponent.originY) * PhysicsBodyLoader.getScale());
+        Vector2 sceneCoords = TransformMathUtils.localToSceneCoordinates(entity, new Vector2(0, 0));
+        bodyDef.position.set(sceneCoords.x * PhysicsBodyLoader.getScale(), sceneCoords.y * PhysicsBodyLoader.getScale());
         bodyDef.angle = transformComponent.rotation * MathUtils.degreesToRadians;
 
         bodyDef.awake = physicsComponent.awake;
