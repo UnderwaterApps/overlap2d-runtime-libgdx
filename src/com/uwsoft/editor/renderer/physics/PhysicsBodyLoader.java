@@ -57,7 +57,7 @@ public class PhysicsBodyLoader {
 
         BodyDef bodyDef = new BodyDef();
         Vector2 sceneCoords = TransformMathUtils.localToSceneCoordinates(entity, new Vector2(0, 0));
-        bodyDef.position.set(sceneCoords.x * PhysicsBodyLoader.getScale(), sceneCoords.y * PhysicsBodyLoader.getScale());
+        bodyDef.position.set((sceneCoords.x + transformComponent.originX) * PhysicsBodyLoader.getScale() , (sceneCoords.y + transformComponent.originY)* PhysicsBodyLoader.getScale() );
         bodyDef.angle = transformComponent.rotation * MathUtils.degreesToRadians;
 
         bodyDef.awake = physicsComponent.awake;
