@@ -15,6 +15,7 @@ import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.TransformMathUtils;
 
 public class PhysicsSystem extends IteratingSystem {
 
@@ -49,8 +50,12 @@ public class PhysicsSystem extends IteratingSystem {
 
 		PhysicsBodyComponent physicsBodyComponent = ComponentRetriever.get(entity, PhysicsBodyComponent.class);
 		Body body = physicsBodyComponent.body;
-		transformComponent.x = body.getPosition().x / PhysicsBodyLoader.getScale() - transformComponent.originX;
-		transformComponent.y = body.getPosition().y / PhysicsBodyLoader.getScale() - transformComponent.originY;
+		transformComponent.x = 0;
+		transformComponent.y = 0;
+		transformComponent.rotation = 0;
+		Vector2 localCoords = TransformMathUtils.sceneToLocalCoordinates(entity, body.getPosition().cpy().scl(1 / PhysicsBodyLoader.getScale()));
+		transformComponent.x = localCoords.x - transformComponent.originX;
+		transformComponent.y = localCoords.y - transformComponent.originY;
 		transformComponent.rotation = body.getAngle() * MathUtils.radiansToDegrees;
 	}
 
@@ -73,7 +78,7 @@ public class PhysicsSystem extends IteratingSystem {
             physicsBodyComponent.centerY = dimensionsComponent.height/2;
 
 			PhysicsBodyComponent bodyPropertiesComponent = ComponentRetriever.get(entity, PhysicsBodyComponent.class);
-			physicsBodyComponent.body = PhysicsBodyLoader.getInstance().createBody(world, bodyPropertiesComponent, polygonComponent.vertices, transformComponent);
+			physicsBodyComponent.body = PhysicsBodyLoader.getInstance().createBody(world, entity, bodyPropertiesComponent, polygonComponent.vertices, transformComponent);
 
 			physicsBodyComponent.body.setUserData(entity);
 		}

@@ -48,13 +48,13 @@ public class TransformMathUtils {
 
 	/** Converts the coordinates given in the parent's coordinate system to this entity's coordinate system. */
 	public static Vector2 parentToLocalCoordinates (Entity childEntity, Vector2 parentCoords) {
-		TransformComponent trnasform = childEntity.getComponent(TransformComponent.class);
+		TransformComponent transform = childEntity.getComponent(TransformComponent.class);
 
-		final float rotation = trnasform.rotation;
-		final float scaleX = trnasform.scaleX;
-		final float scaleY = trnasform.scaleY;
-		final float childX = trnasform.x;
-		final float childY = trnasform.y;
+		final float rotation = transform.rotation;
+		final float scaleX = transform.scaleX;
+		final float scaleY = transform.scaleY;
+		final float childX = transform.x;
+		final float childY = transform.y;
 		if (rotation == 0) {
 			if (scaleX == 1 && scaleY == 1) {
 				parentCoords.x -= childX;
