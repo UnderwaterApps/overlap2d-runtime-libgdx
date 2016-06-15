@@ -32,12 +32,12 @@ public class ButtonComponent implements Component {
     }
 
     public void setTouchState(boolean isTouched) {
-        if(this.isTouched == false && isTouched == true) {
+        if(!this.isTouched && isTouched) {
             for(int i = 0; i < listeners.size; i++) {
                 listeners.get(i).touchDown();
             }
         }
-        if(this.isTouched == true && isTouched == false) {
+        if(this.isTouched && !isTouched) {
             for(int i = 0; i < listeners.size; i++) {
                 listeners.get(i).touchUp();
                 listeners.get(i).clicked();

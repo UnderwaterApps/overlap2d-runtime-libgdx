@@ -77,6 +77,8 @@ public class CompositeComponentFactory extends ComponentFactory {
     protected void createCompositeComponents(Entity entity, CompositeItemVO vo) {
         CompositeTransformComponent compositeTransform = new CompositeTransformComponent();
 
+        compositeTransform.automaticResize = vo.automaticResize;
+
         LayerMapComponent layerMap = new LayerMapComponent();
         if(vo.composite.layers.size() == 0) {
             vo.composite.layers.add(LayerItemVO.createDefault());

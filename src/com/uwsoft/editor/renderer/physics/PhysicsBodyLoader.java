@@ -1,8 +1,12 @@
 package com.uwsoft.editor.renderer.physics;
 
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
+import com.uwsoft.editor.renderer.utils.TransformMathUtils;
 
 /**
  * Created by azakhary on 9/28/2014.
@@ -35,7 +39,7 @@ public class PhysicsBodyLoader {
         return getInstance().scale;
     }
 
-    public Body createBody(World world, PhysicsBodyComponent physicsComponent, Vector2[][] minPolygonData, Vector2 mulVec, float rotationRad) {
+    public Body createBody(World world, Entity entity, PhysicsBodyComponent physicsComponent, Vector2[][] minPolygonData, TransformComponent transformComponent) {
 
         FixtureDef fixtureDef = new FixtureDef();
 
@@ -52,7 +56,9 @@ public class PhysicsBodyLoader {
         }
 
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(0, 0);
+        Vector2 sceneCoords = TransformMathUtils.localToSceneCoordinates(entity, new Vector2(0, 0));
+        bodyDef.position.set((sceneCoords.x + transformComponent.originX) * PhysicsBodyLoader.getScale() , (sceneCoords.y + transformComponent.originY)* PhysicsBodyLoader.getScale() );
+        bodyDef.angle = transformComponent.rotation * MathUtils.degreesToRadians;
 
         bodyDef.awake = physicsComponent.awake;
         bodyDef.allowSleep = physicsComponent.allowSleep;
@@ -76,17 +82,14 @@ public class PhysicsBodyLoader {
                 float tempX = minPolygonData[i][j / 2].x;
                 float tempY = minPolygonData[i][j/2].y;
 
-                minPolygonData[i][j/2].x -= physicsComponent.centerX;
-                minPolygonData[i][j/2].y -= physicsComponent.centerY;
+                minPolygonData[i][j/2].x -= transformComponent.originX;
+                minPolygonData[i][j/2].y -= transformComponent.originY;
 
-                minPolygonData[i][j/2].x *= mulVec.x;
-                minPolygonData[i][j/2].y *= mulVec.y;
+                minPolygonData[i][j/2].x *= transformComponent.scaleX;
+                minPolygonData[i][j/2].y *= transformComponent.scaleY;
 
-        		verts[j] = (minPolygonData[i][j/2].x * (float)Math.cos(rotationRad) - minPolygonData[i][j/2].y * (float)Math.sin(rotationRad)) * scale ;
-        		verts[j+1] = (minPolygonData[i][j/2].x * (float)Math.sin(rotationRad) + minPolygonData[i][j/2].y * (float)Math.cos(rotationRad)) * scale;
-
-                verts[j] += physicsComponent.centerX * scale;
-                verts[j+1] += physicsComponent.centerY * scale;
+        		verts[j] = minPolygonData[i][j/2].x * scale ;
+        		verts[j+1] = minPolygonData[i][j/2].y * scale;
 
                 minPolygonData[i][j / 2].x = tempX;
                 minPolygonData[i][j/2].y = tempY;

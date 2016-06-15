@@ -36,6 +36,7 @@ import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -62,7 +63,7 @@ public class SpriteComponentFactory extends ComponentFactory {
         DimensionsComponent component = new DimensionsComponent();
 
         SpriteAnimationVO sVo = (SpriteAnimationVO) vo;
-        Array<TextureAtlas.AtlasRegion> regions = rm.getSpriteAnimation(sVo.animationName).getRegions();
+        Array<TextureAtlas.AtlasRegion> regions = getRegions(sVo.animationName);
 
         ResolutionEntryVO resolutionEntryVO = rm.getLoadedResolution();
         ProjectInfoVO projectInfoVO = rm.getProjectVO();
@@ -93,7 +94,8 @@ public class SpriteComponentFactory extends ComponentFactory {
         if(vo.playMode == 5) spriteAnimationComponent.playMode = Animation.PlayMode.LOOP_RANDOM;
         if(vo.playMode == 6) spriteAnimationComponent.playMode = Animation.PlayMode.NORMAL;
 
-        Array<TextureAtlas.AtlasRegion> regions = rm.getSpriteAnimation(spriteAnimationComponent.animationName).getRegions();
+        // filtering regions by name
+        Array<TextureAtlas.AtlasRegion> regions = getRegions(spriteAnimationComponent.animationName);
 
         AnimationComponent animationComponent = new AnimationComponent();
         SpriteAnimationStateComponent stateComponent = new SpriteAnimationStateComponent(regions);
@@ -119,5 +121,18 @@ public class SpriteComponentFactory extends ComponentFactory {
         entity.add(spriteAnimationComponent);
 
         return spriteAnimationComponent;
+    }
+
+    private Array<TextureAtlas.AtlasRegion> getRegions(String filter) {
+        // filtering regions by name
+        Array<TextureAtlas.AtlasRegion> allRegions = rm.getSpriteAnimation(filter).getRegions();
+        Array<TextureAtlas.AtlasRegion> regions = new Array<TextureAtlas.AtlasRegion>();
+        for(TextureAtlas.AtlasRegion region: allRegions) {
+            if(region.name.contains(filter)) {
+                regions.add(region);
+            }
+        }
+
+        return regions;
     }
 }

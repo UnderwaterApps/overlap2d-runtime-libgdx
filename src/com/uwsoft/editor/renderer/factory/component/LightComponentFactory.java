@@ -21,7 +21,6 @@ package com.uwsoft.editor.renderer.factory.component;
 import box2dLight.ConeLight;
 import box2dLight.PointLight;
 import box2dLight.RayHandler;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
@@ -55,8 +54,9 @@ public class LightComponentFactory extends ComponentFactory {
     @Override
     protected DimensionsComponent createDimensionsComponent(Entity entity, MainItemVO vo) {
         DimensionsComponent component = new DimensionsComponent();
+
         ProjectInfoVO projectInfoVO = rm.getProjectVO();
-        component.boundBox = new Rectangle(-10f/projectInfoVO.pixelToWorld, -10f/projectInfoVO.pixelToWorld, 20f/projectInfoVO.pixelToWorld, 20f/projectInfoVO.pixelToWorld);
+        component.boundBox = new Rectangle(-10f / projectInfoVO.pixelToWorld, -10f / projectInfoVO.pixelToWorld, 20f / projectInfoVO.pixelToWorld, 20f / projectInfoVO.pixelToWorld);
 
         entity.add(component);
         return component;

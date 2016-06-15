@@ -1,6 +1,7 @@
 package com.uwsoft.editor.renderer.data;
 
 import com.badlogic.ashley.core.Entity;
+import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
@@ -18,6 +19,7 @@ public class CompositeItemVO extends MainItemVO {
 
 	public float width;
 	public float height;
+	public boolean automaticResize;
 	
 	public CompositeItemVO() {
 		composite = new CompositeVO();
@@ -67,9 +69,11 @@ public class CompositeItemVO extends MainItemVO {
 		composite.loadFromEntity(entity);
 
 		DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
+		CompositeTransformComponent compositeTransformComponent = ComponentRetriever.get(entity, CompositeTransformComponent.class);
 
 		width = dimensionsComponent.width;
 		height = dimensionsComponent.height;
+		automaticResize = compositeTransformComponent.automaticResize;
 	}
 
 	public void cleanIds() {
