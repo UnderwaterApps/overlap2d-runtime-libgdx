@@ -328,11 +328,6 @@ public class CompositeActor extends Group {
      */
     public interface BuiltItemHandler {
 
-        /**
-         * @param item newly built and added to a parent (in case it's not a root actor)
-         */
-        void onItemBuild(Actor item);
-
         BuiltItemHandler DEFAULT = new BuiltItemHandler() {
             @Override
             public void onItemBuild(Actor item) {
@@ -344,6 +339,12 @@ public class CompositeActor extends Group {
                 }
             }
         };
+
+        /**
+         * @param item newly built and added to a parent (in case it's not a root actor)
+         */
+        void onItemBuild(Actor item);
+
     }
 
     @Override
