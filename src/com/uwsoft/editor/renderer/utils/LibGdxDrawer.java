@@ -11,8 +11,8 @@ import com.brashmonkey.spriter.Timeline.Key.Object;
 
 public class LibGdxDrawer extends Drawer<Sprite>{
 	
-	Batch batch;
-	ShapeRenderer renderer;
+	private Batch batch;
+	private ShapeRenderer renderer;
 	
 	public LibGdxDrawer(Loader<Sprite> loader, ShapeRenderer renderer){
 		super(loader);

@@ -18,7 +18,7 @@ import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
 public class NinePatchComponentFactory extends ComponentFactory {
 
-	NinePatchComponent ninePatchComponent;
+	private NinePatchComponent ninePatchComponent;
 
 	public NinePatchComponentFactory(RayHandler rayHandler, World world, IResourceRetriever rm) {
 		super(rayHandler, world, rm);
