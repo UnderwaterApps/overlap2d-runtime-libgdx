@@ -40,6 +40,24 @@ public class EntityFactory {
 	public World world;
 	public IResourceRetriever rm = null;
 
+	public EntityFactory( RayHandler rayHandler, World world, IResourceRetriever rm ) {
+
+		this.rayHandler = rayHandler;
+		this.world = world;
+		this.rm = rm;
+
+		compositeComponentFactory = new CompositeComponentFactory(rayHandler, world, rm);
+		lightComponentFactory = new LightComponentFactory(rayHandler, world, rm);
+		particleEffectComponentFactory = new ParticleEffectComponentFactory(rayHandler, world, rm);
+		simpleImageComponentFactory = new SimpleImageComponentFactory(rayHandler, world, rm);
+		spriteComponentFactory = new SpriteComponentFactory(rayHandler, world, rm);
+		spriterComponentFactory = new SpriterComponentFactory(rayHandler, world, rm);
+		labelComponentFactory = new LabelComponentFactory(rayHandler, world, rm);
+		ninePatchComponentFactory = new NinePatchComponentFactory(rayHandler, world, rm);
+		colorPrimitiveFactory = new ColorPrimitiveComponentFactory(rayHandler, world, rm);
+
+	}
+
 	protected ComponentFactory compositeComponentFactory, lightComponentFactory, particleEffectComponentFactory,
 			simpleImageComponentFactory, spriteComponentFactory, spriterComponentFactory, labelComponentFactory, ninePatchComponentFactory, colorPrimitiveFactory;
 
@@ -54,24 +72,6 @@ public class EntityFactory {
     public SpriteComponentFactory getSpriteComponentFactory() {
         return (SpriteComponentFactory) spriteComponentFactory;
     }
-
-	public EntityFactory( RayHandler rayHandler, World world, IResourceRetriever rm ) {
-	
-		this.rayHandler = rayHandler;
-		this.world = world;
-		this.rm = rm;
-
-		compositeComponentFactory = new CompositeComponentFactory(rayHandler, world, rm);
-		lightComponentFactory = new LightComponentFactory(rayHandler, world, rm);
-		particleEffectComponentFactory = new ParticleEffectComponentFactory(rayHandler, world, rm);
-		simpleImageComponentFactory = new SimpleImageComponentFactory(rayHandler, world, rm);
-		spriteComponentFactory = new SpriteComponentFactory(rayHandler, world, rm);
-		spriterComponentFactory = new SpriterComponentFactory(rayHandler, world, rm);
-		labelComponentFactory = new LabelComponentFactory(rayHandler, world, rm);
-		ninePatchComponentFactory = new NinePatchComponentFactory(rayHandler, world, rm);
-		colorPrimitiveFactory = new ColorPrimitiveComponentFactory(rayHandler, world, rm);
-		
-	}
 
 	public void addExternalFactory(IExternalItemType itemType) {
 		externalFactories.put(itemType.getTypeId(), itemType.getComponentFactory());
