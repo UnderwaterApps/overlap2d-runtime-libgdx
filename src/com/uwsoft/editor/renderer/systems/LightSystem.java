@@ -42,10 +42,12 @@ public class LightSystem extends IteratingSystem {
 		float relativeRotation = 0;
 		
 		Entity parentEntity = parentNodeComponent.parentEntity;
-		TransformComponent parentTransformComponent = transformComponentMapper.get(parentEntity);
+		TransformComponent parentTransformComponent;
+
 		while (parentEntity != null) {
-			relativeX+=parentTransformComponent.x;
-			relativeY+=parentTransformComponent.y;
+            parentTransformComponent = transformComponentMapper.get(parentEntity);
+            relativeX+=parentTransformComponent.x;
+            relativeY+=parentTransformComponent.y;
 			relativeRotation+=parentTransformComponent.rotation;
 			parentNodeComponent = parentNodeComponentMapper.get(parentEntity);
 			if(parentNodeComponent == null){
