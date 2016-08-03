@@ -40,8 +40,8 @@ public class TexturRegionDrawLogic implements Drawable {
             if(shaderComponent.getShader() != null) {
                 batch.setShader(shaderComponent.getShader());
 
-                batch.getShader().setUniformf("deltaTime", Gdx.graphics.getDeltaTime());
-                batch.getShader().setUniformf("time", Overlap2dRenderer.timeRunning);
+//                batch.getShader().setUniformf("deltaTime", Gdx.graphics.getDeltaTime());
+//                batch.getShader().setUniformf("time", Overlap2dRenderer.timeRunning);
 
                 GL20 gl = Gdx.gl20;
                 int error;
