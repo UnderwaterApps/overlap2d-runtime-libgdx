@@ -7,23 +7,20 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.uwsoft.editor.renderer.components.DimensionsComponent;
-import com.uwsoft.editor.renderer.components.ShaderComponent;
-import com.uwsoft.editor.renderer.components.TextureRegionComponent;
-import com.uwsoft.editor.renderer.components.TintComponent;
-import com.uwsoft.editor.renderer.components.TransformComponent;
-import com.uwsoft.editor.renderer.systems.render.Overlap2dRenderer;
+import com.uwsoft.editor.renderer.components.*;
 
 public class TexturRegionDrawLogic implements Drawable {
 
-	private ComponentMapper<TintComponent> tintComponentComponentMapper;
+    private static final String TAG = "TexturRegionDrawLogic";
+
+    private ComponentMapper<TintComponent> tintComponentComponentMapper;
 	private ComponentMapper<TextureRegionComponent> textureRegionMapper;
 	private ComponentMapper<TransformComponent> transformMapper;
 	private ComponentMapper<DimensionsComponent> dimensionsComponentComponentMapper;
 	private ComponentMapper<ShaderComponent> shaderComponentMapper;
 
 
-	public TexturRegionDrawLogic() {
+    public TexturRegionDrawLogic() {
 		tintComponentComponentMapper = ComponentMapper.getFor(TintComponent.class);
 		textureRegionMapper = ComponentMapper.getFor(TextureRegionComponent.class);
 		transformMapper = ComponentMapper.getFor(TransformComponent.class);
@@ -31,38 +28,42 @@ public class TexturRegionDrawLogic implements Drawable {
 		shaderComponentMapper = ComponentMapper.getFor(ShaderComponent.class);
 	}
 
-	@Override
-	public void draw(Batch batch, Entity entity, float parentAlpha) {
+    @Override
+    public void draw(Batch batch, Entity entity, float parentAlpha) {
         TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
+        ShaderComponent shaderComponent = shaderComponentMapper.get(entity);
+        if (shaderComponentMapper.has(entity)) {
 
-	if(shaderComponentMapper.has(entity)){
-			ShaderComponent shaderComponent = shaderComponentMapper.get(entity);
-            if(shaderComponent.getShader() != null) {
-                batch.setShader(shaderComponent.getShader());
+            //              batch.setShader(shaderComponent.getShader());
+            shaderComponent.shaderLogic.begin(batch, shaderComponent);
+            //                batch.getShader().setUniformf("deltaTime", Gdx.graphics.getDeltaTime());
+            //                batch.getShader().setUniformf("time", Overlap2dRenderer.timeRunning);
 
-//                batch.getShader().setUniformf("deltaTime", Gdx.graphics.getDeltaTime());
-//                batch.getShader().setUniformf("time", Overlap2dRenderer.timeRunning);
-
-                GL20 gl = Gdx.gl20;
-                int error;
-                if ((error = gl.glGetError()) != GL20.GL_NO_ERROR) {
-                    Gdx.app.log("opengl", "Error: " + error);
-                    Gdx.app.log("opengl", shaderComponent.getShader().getLog());
-                    //throw new RuntimeException( ": glError " + error);
-                }
+            GL20 gl = Gdx.gl20;
+            int error;
+            if ((error = gl.glGetError()) != GL20.GL_NO_ERROR) {
+                Gdx.app.log("opengl", "Error: " + error);
+                Gdx.app.log("opengl", shaderComponent.getShader().getLog());
+                //throw new RuntimeException( ": glError " + error);
             }
-	}
 
-        if(entityTextureRegionComponent.polygonSprite != null) {
-            drawTiledPolygonSprite(batch, entity);
+
+            if (entityTextureRegionComponent.polygonSprite != null) {
+                drawTiledPolygonSprite(batch, entity);
+            } else {
+                drawSprite(batch, entity, parentAlpha);
+            }
+            shaderComponent.shaderLogic.end(batch);
         } else {
-            drawSprite(batch, entity, parentAlpha);
-        }
+           // shaderManager.checkActiveFrameBuffer();
+            if (entityTextureRegionComponent.polygonSprite != null) {
+                drawTiledPolygonSprite(batch, entity);
+            } else {
+                drawSprite(batch, entity, parentAlpha);
+            }
 
-        if(shaderComponentMapper.has(entity)){
-			batch.setShader(null);
-		}
-	}
+        }
+    }
 
     public void drawSprite(Batch batch, Entity entity, float parentAlpha) {
         TintComponent tintComponent = tintComponentComponentMapper.get(entity);
