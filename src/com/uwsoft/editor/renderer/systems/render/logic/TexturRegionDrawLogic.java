@@ -32,7 +32,7 @@ public class TexturRegionDrawLogic implements Drawable {
     public void draw(Batch batch, Entity entity, float parentAlpha) {
         TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
         ShaderComponent shaderComponent = shaderComponentMapper.get(entity);
-        if (shaderComponentMapper.has(entity)) {
+        if (shaderComponentMapper.has(entity) && shaderComponent.shaderLogic != null) {
 
             //              batch.setShader(shaderComponent.getShader());
             shaderComponent.shaderLogic.begin(batch, shaderComponent);
