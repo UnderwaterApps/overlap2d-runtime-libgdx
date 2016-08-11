@@ -18,6 +18,7 @@ public class LabelDrawableLogic implements Drawable {
 	private ComponentMapper<TintComponent> tintComponentMapper;
 	private ComponentMapper<DimensionsComponent> dimensionsComponentMapper;
 	private ComponentMapper<TransformComponent> transformMapper;
+    private ComponentMapper<ShaderComponent> shaderComponentMapper;
 
 	private final Color tmpColor = new Color();
 
@@ -26,6 +27,7 @@ public class LabelDrawableLogic implements Drawable {
 		tintComponentMapper = ComponentMapper.getFor(TintComponent.class);
 		dimensionsComponentMapper = ComponentMapper.getFor(DimensionsComponent.class);
 		transformMapper = ComponentMapper.getFor(TransformComponent.class);
+        shaderComponentMapper = ComponentMapper.getFor(ShaderComponent.class);
 	}
 	
 	@Override
@@ -36,19 +38,43 @@ public class LabelDrawableLogic implements Drawable {
 		TintComponent tint = tintComponentMapper.get(entity);
 
 		tmpColor.set(tint.color);
+        ShaderComponent shaderComponent = shaderComponentMapper.get(entity);
+        if (shaderComponentMapper.has(entity) && shaderComponent.shaderLogic != null) {
+//            System.out.println("a text with a shader");
 
-		if (labelComponent.style.background != null) {
-			batch.setColor(tmpColor);
-			labelComponent.style.background.draw(batch, entityTransformComponent.x, entityTransformComponent.y, dimenstionsComponent.width, dimenstionsComponent.height);
-			//System.out.println("LAbel BG");
-		}
+            batch.setShader(shaderComponent.shaderProgram);
+            if (labelComponent.style.background != null) {
+                batch.setColor(tmpColor);
+                labelComponent.style.background.draw(batch, entityTransformComponent.x, entityTransformComponent.y, dimenstionsComponent.width, dimenstionsComponent.height);
+                //System.out.println("LAbel BG");
+            }
 
-		if(labelComponent.style.fontColor != null) tmpColor.mul(labelComponent.style.fontColor);
-		//tmpColor.a *= TODO consider parent alpha
+            if(labelComponent.style.fontColor != null) tmpColor.mul(labelComponent.style.fontColor);
+            //tmpColor.a *= TODO consider parent alpha
 
-		labelComponent.cache.tint(tmpColor);
-		labelComponent.cache.setPosition(entityTransformComponent.x, entityTransformComponent.y);
-		labelComponent.cache.draw(batch);
+            labelComponent.cache.tint(tmpColor);
+            labelComponent.cache.setPosition(entityTransformComponent.x, entityTransformComponent.y);
+            labelComponent.cache.draw(batch);
+
+            batch.setShader(null);
+        } else {
+
+            if (labelComponent.style.background != null) {
+                batch.setColor(tmpColor);
+                labelComponent.style.background.draw(batch, entityTransformComponent.x, entityTransformComponent.y, dimenstionsComponent.width, dimenstionsComponent.height);
+                //System.out.println("LAbel BG");
+            }
+
+            if(labelComponent.style.fontColor != null) tmpColor.mul(labelComponent.style.fontColor);
+            //tmpColor.a *= TODO consider parent alpha
+
+            labelComponent.cache.tint(tmpColor);
+            labelComponent.cache.setPosition(entityTransformComponent.x, entityTransformComponent.y);
+            labelComponent.cache.draw(batch);
+
+        }
+
+
 	}
 
 }
