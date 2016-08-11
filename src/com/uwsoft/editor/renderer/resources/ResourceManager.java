@@ -320,6 +320,7 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = Math.round(pair.fontSize * resMultiplier);
         BitmapFont font = generator.generateFont(parameter);
+        font.setUseIntegerPositions(false);
         bitmapFonts.put(pair, font);
     }
 

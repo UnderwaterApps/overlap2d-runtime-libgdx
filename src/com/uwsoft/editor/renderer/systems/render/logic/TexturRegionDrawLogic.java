@@ -11,8 +11,6 @@ import com.uwsoft.editor.renderer.components.*;
 
 public class TexturRegionDrawLogic implements Drawable {
 
-    private static final String TAG = "TexturRegionDrawLogic";
-
     private ComponentMapper<TintComponent> tintComponentComponentMapper;
 	private ComponentMapper<TextureRegionComponent> textureRegionMapper;
 	private ComponentMapper<TransformComponent> transformMapper;
@@ -32,36 +30,15 @@ public class TexturRegionDrawLogic implements Drawable {
     public void draw(Batch batch, Entity entity, float parentAlpha) {
         TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
         ShaderComponent shaderComponent = shaderComponentMapper.get(entity);
+
         if (shaderComponentMapper.has(entity) && shaderComponent.shaderLogic != null) {
-
-            //              batch.setShader(shaderComponent.getShader());
-            shaderComponent.shaderLogic.begin(batch, shaderComponent);
-            //                batch.getShader().setUniformf("deltaTime", Gdx.graphics.getDeltaTime());
-            //                batch.getShader().setUniformf("time", Overlap2dRenderer.timeRunning);
-
-            GL20 gl = Gdx.gl20;
-            int error;
-            if ((error = gl.glGetError()) != GL20.GL_NO_ERROR) {
-                Gdx.app.log("opengl", "Error: " + error);
-                Gdx.app.log("opengl", shaderComponent.getShader().getLog());
-                //throw new RuntimeException( ": glError " + error);
-            }
-
-
-            if (entityTextureRegionComponent.polygonSprite != null) {
-                drawTiledPolygonSprite(batch, entity);
-            } else {
-                drawSprite(batch, entity, parentAlpha);
-            }
-            shaderComponent.shaderLogic.end(batch);
+            shaderComponent.shaderLogic.draw(batch, entity, parentAlpha);
         } else {
-           // shaderManager.checkActiveFrameBuffer();
-            if (entityTextureRegionComponent.polygonSprite != null) {
+            if(entityTextureRegionComponent.polygonSprite != null) {
                 drawTiledPolygonSprite(batch, entity);
             } else {
                 drawSprite(batch, entity, parentAlpha);
             }
-
         }
     }
 
