@@ -21,7 +21,7 @@ Otherwise just download this as sources, and include in your project by any mean
 
 *Important* Make sure you also have libGDX, and free type fonts library in your dependencies.
 
-When creating new prohect, why not use libGDX setup app? Here are the instructions:
+When creating new project, why not use libGDX setup app? Here are the instructions:
 http://overlap2d.com/overlap2d-is-just-one-checkbox-away-with-libgdx-official-setup-app/
 
 When generated the project, just make sure to change the version of overlap2d runtime to 0.1.2-SNAPSHOT (this will be updated soon)
