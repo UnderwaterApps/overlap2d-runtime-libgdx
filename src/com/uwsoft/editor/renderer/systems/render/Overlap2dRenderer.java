@@ -62,13 +62,25 @@ public class Overlap2dRenderer extends IteratingSystem {
 		batch.end();
 
 			//TODO kinda not cool (this should be done in separate lights renderer maybe?
-			if (rayHandler != null) {
-				rayHandler.setCulling(false);
-				OrthographicCamera orthoCamera = (OrthographicCamera) camera;
-				camera.combined.scl(1f / PhysicsBodyLoader.getScale());
-				rayHandler.setCombinedMatrix(orthoCamera);
-				rayHandler.updateAndRender();
-			}
+//			if (rayHandler != null) {
+//				rayHandler.setCulling(false);
+//				OrthographicCamera orthoCamera = (OrthographicCamera) camera;
+//				camera.combined.scl(1f / PhysicsBodyLoader.getScale());
+//				rayHandler.setCombinedMatrix(orthoCamera);
+//				rayHandler.updateAndRender();
+//			}
+        //enabling culling
+        if (rayHandler != null) {
+            rayHandler.setCulling(true);
+            OrthographicCamera orthoCamera = (OrthographicCamera) camera;
+//				camera.combined.scl(1f / PhysicsBodyLoader.getScale());
+            rayHandler.setCombinedMatrix(camera.combined.scl(1f/PhysicsBodyLoader.getScale()),
+                    camera.position.x * PhysicsBodyLoader.getScale(),
+                    camera.position.y * PhysicsBodyLoader.getScale(),
+                    2 * camera.viewportWidth * orthoCamera.zoom * PhysicsBodyLoader.getScale(),
+                    2 * camera.viewportHeight * orthoCamera.zoom * PhysicsBodyLoader.getScale());
+            rayHandler.updateAndRender();
+        }
 
 		//debugRenderer.render(world, camera.combined);
 		//TODO Spine rendere thing
