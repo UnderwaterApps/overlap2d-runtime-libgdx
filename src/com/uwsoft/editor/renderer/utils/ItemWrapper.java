@@ -20,6 +20,8 @@ package com.uwsoft.editor.renderer.utils;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.ParentNodeComponent;
@@ -85,10 +87,10 @@ public class ItemWrapper {
         return entity;
     }
 
-    public IScript addScript(IScript script) {
+    public IScript addScript(IScript script, PooledEngine engine) {
         ScriptComponent component = ComponentRetriever.get(entity, ScriptComponent.class);
         if(component == null) {
-            component = new ScriptComponent();
+            component = engine.createComponent(ScriptComponent.class);
             entity.add(component);
         }
         component.addScript(script);
@@ -96,4 +98,6 @@ public class ItemWrapper {
 
         return script;
     }
+
+
 }
