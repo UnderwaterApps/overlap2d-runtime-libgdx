@@ -21,6 +21,7 @@ package com.uwsoft.editor.renderer.factory.component;
 import box2dLight.RayHandler;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.physics.box2d.World;
 import com.brashmonkey.spriter.Player;
@@ -42,8 +43,8 @@ import com.uwsoft.editor.renderer.utils.LibGdxLoader;
  */
 public class SpriterComponentFactory extends ComponentFactory {
 
-    public SpriterComponentFactory(RayHandler rayHandler, World world, IResourceRetriever rm) {
-        super(rayHandler, world, rm);
+    public SpriterComponentFactory(PooledEngine engine, RayHandler rayHandler, World world, IResourceRetriever rm) {
+        super(engine,rayHandler, world, rm);
     }
 
     @Override
@@ -56,7 +57,7 @@ public class SpriterComponentFactory extends ComponentFactory {
 
     @Override
     protected DimensionsComponent createDimensionsComponent(Entity entity, MainItemVO vo) {
-        DimensionsComponent component = new DimensionsComponent();
+        DimensionsComponent component = engine.createComponent(DimensionsComponent.class);
 
         SpriterComponent spriterComponent = ComponentRetriever.get(entity, SpriterComponent.class);
 
@@ -69,7 +70,7 @@ public class SpriterComponentFactory extends ComponentFactory {
     }
 
     protected SpriterComponent createSpriterDataComponent(Entity entity, SpriterVO vo) {
-        SpriterComponent component = new SpriterComponent();
+        SpriterComponent component = engine.createComponent(SpriterComponent.class);
         component. entity = vo.entity;
         component.animation = vo.animation;
         component. animationName = vo.animationName;
@@ -88,7 +89,7 @@ public class SpriterComponentFactory extends ComponentFactory {
         component.player.setAnimation(component.currentAnimationIndex);
         component.player.setScale(component.scale);
 
-        SpriterDrawerComponent spriterDrawer = new SpriterDrawerComponent();
+        SpriterDrawerComponent spriterDrawer = engine.createComponent(SpriterDrawerComponent.class);
 
         spriterDrawer.drawer = new LibGdxDrawer(loader, null);
 

@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pool;
 import com.uwsoft.editor.renderer.data.FrameRange;
 
 import java.util.ArrayList;
@@ -11,18 +12,21 @@ import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SpriteAnimationStateComponent implements Component {
+public class SpriteAnimationStateComponent implements Component,Pool.Poolable {
     public Array<TextureAtlas.AtlasRegion> allRegions;
 	public Animation currentAnimation;
 	public float time = 0.0f;
 
     public  boolean paused = false;
 
-    public SpriteAnimationStateComponent(Array<TextureAtlas.AtlasRegion> allRegions) {
+    public SpriteAnimationStateComponent(){
+    }
+
+    public void setRegions(Array<TextureAtlas.AtlasRegion> allRegions) {
         this.allRegions = sortAndGetRegions(allRegions);
     }
-	
-	public Animation get() {
+
+    public Animation get() {
 		return currentAnimation;
 	}
 
@@ -43,6 +47,14 @@ public class SpriteAnimationStateComponent implements Component {
         regions.sort(new SortRegionsComparator());
 
         return regions;
+    }
+
+    @Override
+    public void reset() {
+        allRegions=null;
+        currentAnimation=null;
+        time = 0.0f;
+        paused = false;
     }
 
     private class SortRegionsComparator implements Comparator<TextureAtlas.AtlasRegion> {

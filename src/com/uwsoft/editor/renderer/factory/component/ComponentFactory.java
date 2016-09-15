@@ -22,7 +22,9 @@ import box2dLight.RayHandler;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Pool;
 import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
 import com.uwsoft.editor.renderer.data.MainItemVO;
@@ -40,6 +42,7 @@ public abstract class ComponentFactory {
     protected IResourceRetriever rm;
     protected RayHandler rayHandler;
     protected World world;
+    protected PooledEngine engine;
 
     protected ComponentMapper<NodeComponent> nodeComponentMapper;
 
@@ -47,15 +50,16 @@ public abstract class ComponentFactory {
         nodeComponentMapper = ComponentMapper.getFor(NodeComponent.class);
     }
 
-    public ComponentFactory(RayHandler rayHandler, World world, IResourceRetriever rm) {
+    public ComponentFactory(PooledEngine engine,RayHandler rayHandler, World world, IResourceRetriever rm) {
         this();
-        injectDependencies(rayHandler, world, rm);
+        injectDependencies(engine,rayHandler, world, rm);
     }
 
-    public void injectDependencies(RayHandler rayHandler, World world, IResourceRetriever rm) {
+    public void injectDependencies(PooledEngine engine,RayHandler rayHandler, World world, IResourceRetriever rm) {
         this.rayHandler = rayHandler;
         this.world = world;
         this.rm = rm;
+        this.engine=engine;
     }
 
     public abstract void createComponents(Entity root, Entity entity, MainItemVO vo);
@@ -76,14 +80,14 @@ public abstract class ComponentFactory {
     	if(vo.shaderName == null || vo.shaderName.isEmpty()){
     		return null;
     	}
-		ShaderComponent component = new ShaderComponent();
+		ShaderComponent component = engine.createComponent(ShaderComponent.class);
 		component.setShader(vo.shaderName, rm.getShaderProgram(vo.shaderName));
 		entity.add(component);
 		return component;
 	}
 
 	protected MainItemComponent createMainItemComponent(Entity entity, MainItemVO vo, int entityType) {
-        MainItemComponent component = new MainItemComponent();
+        MainItemComponent component = engine.createComponent(MainItemComponent.class);
         component.customVars = vo.customVars;
         component.uniqueId = vo.uniqueId;
         component.itemIdentifier = vo.itemIdentifier;
@@ -99,7 +103,7 @@ public abstract class ComponentFactory {
     }
 
     protected TransformComponent createTransformComponent(Entity entity, MainItemVO vo, DimensionsComponent dimensionsComponent) {
-        TransformComponent component = new TransformComponent();
+        TransformComponent component = engine.createComponent(TransformComponent.class);
         component.rotation = vo.rotation;
         component.scaleX = vo.scaleX;
         component.scaleY = vo.scaleY;
@@ -120,7 +124,7 @@ public abstract class ComponentFactory {
     protected abstract DimensionsComponent createDimensionsComponent(Entity entity, MainItemVO vo);
 
     protected TintComponent createTintComponent(Entity entity, MainItemVO vo) {
-        TintComponent component = new TintComponent();
+        TintComponent component = engine.createComponent(TintComponent.class);
         component.color.set(vo.tint[0], vo.tint[1], vo.tint[2], vo.tint[3]);
 
         entity.add(component);
@@ -129,7 +133,7 @@ public abstract class ComponentFactory {
     }
 
     protected ZIndexComponent createZIndexComponent(Entity entity, MainItemVO vo) {
-        ZIndexComponent component = new ZIndexComponent();
+        ZIndexComponent component = engine.createComponent(ZIndexComponent.class);
 
         if(vo.layerName == "" || vo.layerName == null) vo.layerName = "Default";
 
@@ -142,13 +146,13 @@ public abstract class ComponentFactory {
     }
 
     protected ScriptComponent createScriptComponent(Entity entity, MainItemVO vo) {
-        ScriptComponent component = new ScriptComponent();
+        ScriptComponent component = engine.createComponent(ScriptComponent.class);
         entity.add(component);
         return component;
     }
 
     protected ParentNodeComponent createParentNodeComponent(Entity root, Entity entity) {
-        ParentNodeComponent component = new ParentNodeComponent();
+        ParentNodeComponent component = engine.createComponent(ParentNodeComponent.class);
         component.parentEntity = root;
         entity.add(component);
 
@@ -176,7 +180,7 @@ public abstract class ComponentFactory {
     }
 
     protected PhysicsBodyComponent createPhysicsBodyPropertiesComponent(Entity entity, MainItemVO vo) {
-        PhysicsBodyComponent component = new PhysicsBodyComponent();
+        PhysicsBodyComponent component = engine.createComponent(PhysicsBodyComponent.class);
         component.allowSleep = vo.physics.allowSleep;
         component.sensor = vo.physics.sensor;
         component.awake = vo.physics.awake;
@@ -197,7 +201,7 @@ public abstract class ComponentFactory {
     }
 
     protected PolygonComponent createMeshComponent(Entity entity, MainItemVO vo) {
-        PolygonComponent component = new PolygonComponent();
+        PolygonComponent component = engine.createComponent(PolygonComponent.class);
         if(vo.shape != null) {
             component.vertices = vo.shape.polygons.clone();
             entity.add(component);

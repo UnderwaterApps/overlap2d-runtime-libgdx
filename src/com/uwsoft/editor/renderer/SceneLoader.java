@@ -1,11 +1,9 @@
 package com.uwsoft.editor.renderer;
 
-import box2dLight.RayHandler;
-
 import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -20,19 +18,36 @@ import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.uwsoft.editor.renderer.commons.IExternalItemType;
-import com.uwsoft.editor.renderer.components.*;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
+import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.renderer.components.ParentNodeComponent;
+import com.uwsoft.editor.renderer.components.ScriptComponent;
 import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
-import com.uwsoft.editor.renderer.data.*;
+import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.data.CompositeVO;
+import com.uwsoft.editor.renderer.data.ProjectInfoVO;
+import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
+import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.resources.ResourceManager;
 import com.uwsoft.editor.renderer.scripts.IScript;
-import com.uwsoft.editor.renderer.systems.*;
+import com.uwsoft.editor.renderer.systems.ButtonSystem;
+import com.uwsoft.editor.renderer.systems.CompositeSystem;
+import com.uwsoft.editor.renderer.systems.LabelSystem;
+import com.uwsoft.editor.renderer.systems.LayerSystem;
+import com.uwsoft.editor.renderer.systems.LightSystem;
+import com.uwsoft.editor.renderer.systems.ParticleSystem;
+import com.uwsoft.editor.renderer.systems.PhysicsSystem;
+import com.uwsoft.editor.renderer.systems.ScriptSystem;
+import com.uwsoft.editor.renderer.systems.SpriteAnimationSystem;
 import com.uwsoft.editor.renderer.systems.action.ActionSystem;
 import com.uwsoft.editor.renderer.systems.render.Overlap2dRenderer;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+
+import box2dLight.RayHandler;
 
 /**
  * SceneLoader is important part of runtime that utilizes provided
@@ -46,7 +61,7 @@ public class SceneLoader {
 	private SceneVO sceneVO;
 	private IResourceRetriever rm = null;
 
-    public Engine engine = null;
+    public PooledEngine engine = null;
 	public RayHandler rayHandler;
 	public World world;
 	public Entity rootEntity;
@@ -66,14 +81,14 @@ public class SceneLoader {
 
 		this.rm = rm;
 
-		this.engine = new Engine();
+		this.engine = new PooledEngine();
 		initSceneLoader();
     }
 
     public SceneLoader(IResourceRetriever rm, World world, RayHandler rayHandler) {
 		this.world = world;
         this.rayHandler = rayHandler;
-        this.engine = new Engine();
+        this.engine = new PooledEngine();
 		this.rm = rm;
 		initSceneLoader();
     }
@@ -109,7 +124,7 @@ public class SceneLoader {
         }
         
         addSystems();
-        entityFactory = new EntityFactory(rayHandler, world, rm);
+        entityFactory = new EntityFactory(engine,rayHandler, world, rm);
     }
 
 	public void setResolution(String resolutionName) {
@@ -142,7 +157,7 @@ public class SceneLoader {
 		engine.addEntity(rootEntity);
 
 		if(sceneVO.composite != null) {
-			entityFactory.initAllChildren(engine, rootEntity, sceneVO.composite);
+			entityFactory.initAllChildren(rootEntity, sceneVO.composite);
 		}
         if (!customLight) {
             setAmbienceInfo(sceneVO);
@@ -328,7 +343,7 @@ public class SceneLoader {
 	 	return rm;
 	 }
 
-    public Engine getEngine() {
+    public PooledEngine getEngine() {
         return engine;
     }
 

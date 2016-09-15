@@ -4,8 +4,9 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.utils.Pool;
 
-public class PhysicsBodyComponent implements Component {
+public class PhysicsBodyComponent implements Component,Pool.Poolable {
 	public int bodyType;
 
 	public float mass;
@@ -31,6 +32,24 @@ public class PhysicsBodyComponent implements Component {
 
     public PhysicsBodyComponent() {
         // putting default values
+        bodyType = 0;
+        mass = 1;
+        centerOfMass = new Vector2(0, 0);
+        rotationalInertia = 0;
+        damping = 0;
+        gravityScale = 0;
+        allowSleep = true;
+        sensor = false;
+        awake = true;
+        bullet = false;
+        density = 1;
+        friction = 1;
+        restitution = 1;
+        filter = new Filter();
+    }
+
+    @Override
+    public void reset() {
         bodyType = 0;
         mass = 1;
         centerOfMass = new Vector2(0, 0);

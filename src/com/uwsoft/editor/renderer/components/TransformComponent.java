@@ -1,8 +1,10 @@
 package com.uwsoft.editor.renderer.components;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.PooledEngine;
+import com.badlogic.gdx.utils.Pool;
 
-public class TransformComponent implements Component {
+public class TransformComponent implements Component,Pool.Poolable {
 	public float x; 
 	public float y;
 	public float scaleX	=	1f; 
@@ -45,6 +47,19 @@ public class TransformComponent implements Component {
 		rotation = backup.rotation;
 		originX = backup.originX;
 		originY = backup.originY;
+		backup = null;
+	}
+
+	@Override
+	public void reset() {
+		x=0;
+		y=0;
+		scaleX	=	1f;
+		scaleY	=	1f;
+		rotation=0;
+		originX=0;
+		originY=0;
+
 		backup = null;
 	}
 }

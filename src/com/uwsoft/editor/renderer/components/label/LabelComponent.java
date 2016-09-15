@@ -7,9 +7,11 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.StringBuilder;
 
-public class LabelComponent implements Component {
+public class LabelComponent implements Component,Pool.Poolable {
+
 	public  LabelStyle style;
 	public final GlyphLayout layout = new GlyphLayout();
 	public BitmapFontCache cache;
@@ -23,7 +25,8 @@ public class LabelComponent implements Component {
 	public float fontScaleX = 1f;
 	public float fontScaleY = 1f;
 
-	
+	public LabelComponent(){}
+
 	public LabelComponent (CharSequence text, Skin skin) {
 		this(text, skin.get(LabelStyle.class));
 	}
@@ -148,5 +151,20 @@ public class LabelComponent implements Component {
 	public void setFontScaleY (float fontScaleY) {
 		this.fontScaleY = fontScaleY;
 	}
-	
+
+    @Override
+    public void reset() {
+        style=null;
+        layout.reset();
+        cache=null;
+
+        text.delete(0,text.length());
+        fontName=null;
+        fontSize=0;
+        labelAlign = Align.center;
+        lineAlign = Align.center;
+        wrap=false;
+        fontScaleX = 1f;
+        fontScaleY = 1f;
+    }
 }

@@ -232,6 +232,13 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
         }
     }
 
+    public void loadParticleEffect(String name) {
+            ParticleEffect effect = new ParticleEffect();
+            effect.load(Gdx.files.internal(particleEffectsPath + File.separator + name), mainPack, "");
+            particleEffects.put(name, effect);
+    }
+
+
     @Override
     public void loadSpriteAnimations() {
         // empty existing ones that are not scheduled to load
@@ -246,6 +253,12 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
             spriteAnimations.put(name, animAtlas);
         }
     }
+
+    public void loadSpriteAnimation(String name){
+        TextureAtlas animAtlas = new TextureAtlas(Gdx.files.internal(packResolutionName + File.separator + spriteAnimationsPath + File.separator + name + File.separator + name + ".atlas"));
+        spriteAnimations.put(name, animAtlas);
+    }
+
     @Override
     public void loadSpriterAnimations() {
     	// empty existing ones that are not scheduled to load
