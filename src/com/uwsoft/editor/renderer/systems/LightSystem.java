@@ -77,7 +77,7 @@ public class LightSystem extends IteratingSystem {
 		
 		
 		if (lightObjectComponent.getType() == LightVO.LightType.POINT) {
-			lightObjectComponent.lightObject.setColor(new Color(tintComponent.color));
+			lightObjectComponent.lightObject.setColor(Color.CLEAR);
             // TODO Physics and resolution part
             lightObjectComponent.lightObject.setDistance(lightObjectComponent.distance * PhysicsBodyLoader.getScale());
             lightObjectComponent.lightObject.setStaticLight(lightObjectComponent.isStatic);
@@ -85,7 +85,7 @@ public class LightSystem extends IteratingSystem {
             lightObjectComponent.lightObject.setXray(lightObjectComponent.isXRay);
 
         } else {
-        	lightObjectComponent.lightObject.setColor(new Color(tintComponent.color));
+        	lightObjectComponent.lightObject.setColor(Color.CLEAR);
             lightObjectComponent.lightObject.setDistance(lightObjectComponent.distance * PhysicsBodyLoader.getScale());
             lightObjectComponent.lightObject.setStaticLight(lightObjectComponent.isStatic);
             lightObjectComponent.lightObject.setDirection(lightObjectComponent.directionDegree);

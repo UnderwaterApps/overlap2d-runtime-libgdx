@@ -4,13 +4,8 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.uwsoft.editor.renderer.components.DimensionsComponent;
-import com.uwsoft.editor.renderer.components.ShaderComponent;
-import com.uwsoft.editor.renderer.components.TintComponent;
-import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.renderer.components.label.LabelComponent;
-import com.uwsoft.editor.renderer.components.spriter.SpriterComponent;
-import com.uwsoft.editor.renderer.components.spriter.SpriterDrawerComponent;
 
 public class LabelDrawableLogic implements Drawable {
 
@@ -19,6 +14,7 @@ public class LabelDrawableLogic implements Drawable {
 	private ComponentMapper<DimensionsComponent> dimensionsComponentMapper;
 	private ComponentMapper<TransformComponent> transformMapper;
     private ComponentMapper<ShaderComponent> shaderComponentMapper;
+    private ComponentMapper<ParentNodeComponent> parentNodeComponentComponentMapper;
 
 	private final Color tmpColor = new Color();
 
@@ -28,6 +24,7 @@ public class LabelDrawableLogic implements Drawable {
 		dimensionsComponentMapper = ComponentMapper.getFor(DimensionsComponent.class);
 		transformMapper = ComponentMapper.getFor(TransformComponent.class);
         shaderComponentMapper = ComponentMapper.getFor(ShaderComponent.class);
+        parentNodeComponentComponentMapper = ComponentMapper.getFor(ParentNodeComponent.class);
 	}
 	
 	@Override
@@ -39,9 +36,8 @@ public class LabelDrawableLogic implements Drawable {
 
 		tmpColor.set(tint.color);
         ShaderComponent shaderComponent = shaderComponentMapper.get(entity);
-        if (shaderComponentMapper.has(entity) && shaderComponent.shaderLogic != null) {
-//            System.out.println("a text with a shader");
 
+        if (shaderComponentMapper.has(entity) && shaderComponent.shaderLogic != null) {
             batch.setShader(shaderComponent.shaderProgram);
             if (labelComponent.style.background != null) {
                 batch.setColor(tmpColor);
@@ -51,14 +47,13 @@ public class LabelDrawableLogic implements Drawable {
 
             if(labelComponent.style.fontColor != null) tmpColor.mul(labelComponent.style.fontColor);
             //tmpColor.a *= TODO consider parent alpha
+            tmpColor.a *= tintComponentMapper.get(parentNodeComponentComponentMapper.get(entity).parentEntity).color.a;
 
             labelComponent.cache.tint(tmpColor);
             labelComponent.cache.setPosition(entityTransformComponent.x, entityTransformComponent.y);
             labelComponent.cache.draw(batch);
-
             batch.setShader(null);
         } else {
-
             if (labelComponent.style.background != null) {
                 batch.setColor(tmpColor);
                 labelComponent.style.background.draw(batch, entityTransformComponent.x, entityTransformComponent.y, dimenstionsComponent.width, dimenstionsComponent.height);
@@ -67,14 +62,12 @@ public class LabelDrawableLogic implements Drawable {
 
             if(labelComponent.style.fontColor != null) tmpColor.mul(labelComponent.style.fontColor);
             //tmpColor.a *= TODO consider parent alpha
+            tmpColor.a *= tintComponentMapper.get(parentNodeComponentComponentMapper.get(entity).parentEntity).color.a;
 
             labelComponent.cache.tint(tmpColor);
             labelComponent.cache.setPosition(entityTransformComponent.x, entityTransformComponent.y);
             labelComponent.cache.draw(batch);
-
         }
-
-
 	}
 
 }
