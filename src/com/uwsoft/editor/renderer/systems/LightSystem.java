@@ -42,10 +42,12 @@ public class LightSystem extends IteratingSystem {
 		float relativeRotation = 0;
 		
 		Entity parentEntity = parentNodeComponent.parentEntity;
-		TransformComponent parentTransformComponent = transformComponentMapper.get(parentEntity);
+		TransformComponent parentTransformComponent;
+
 		while (parentEntity != null) {
-			relativeX+=parentTransformComponent.x;
-			relativeY+=parentTransformComponent.y;
+            parentTransformComponent = transformComponentMapper.get(parentEntity);
+            relativeX+=parentTransformComponent.x;
+            relativeY+=parentTransformComponent.y;
 			relativeRotation+=parentTransformComponent.rotation;
 			parentNodeComponent = parentNodeComponentMapper.get(parentEntity);
 			if(parentNodeComponent == null){
@@ -75,7 +77,7 @@ public class LightSystem extends IteratingSystem {
 		
 		
 		if (lightObjectComponent.getType() == LightVO.LightType.POINT) {
-			lightObjectComponent.lightObject.setColor(new Color(tintComponent.color));
+			lightObjectComponent.lightObject.setColor(Color.CLEAR);
             // TODO Physics and resolution part
             lightObjectComponent.lightObject.setDistance(lightObjectComponent.distance * PhysicsBodyLoader.getScale());
             lightObjectComponent.lightObject.setStaticLight(lightObjectComponent.isStatic);
@@ -83,7 +85,7 @@ public class LightSystem extends IteratingSystem {
             lightObjectComponent.lightObject.setXray(lightObjectComponent.isXRay);
 
         } else {
-        	lightObjectComponent.lightObject.setColor(new Color(tintComponent.color));
+        	lightObjectComponent.lightObject.setColor(Color.CLEAR);
             lightObjectComponent.lightObject.setDistance(lightObjectComponent.distance * PhysicsBodyLoader.getScale());
             lightObjectComponent.lightObject.setStaticLight(lightObjectComponent.isStatic);
             lightObjectComponent.lightObject.setDirection(lightObjectComponent.directionDegree);

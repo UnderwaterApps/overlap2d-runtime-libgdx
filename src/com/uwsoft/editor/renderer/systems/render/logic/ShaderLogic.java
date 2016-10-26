@@ -2,45 +2,32 @@ package com.uwsoft.editor.renderer.systems.render.logic;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
+import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.renderer.components.*;
 
-public class TexturRegionDrawLogic implements Drawable {
+/**
+ * Created by Simone on 8/5/2016.
+ */
+public abstract class ShaderLogic {
 
-    private ComponentMapper<TintComponent> tintComponentComponentMapper;
-	private ComponentMapper<TextureRegionComponent> textureRegionMapper;
-	private ComponentMapper<TransformComponent> transformMapper;
-	private ComponentMapper<DimensionsComponent> dimensionsComponentComponentMapper;
-	private ComponentMapper<ShaderComponent> shaderComponentMapper;
+    protected ComponentMapper<TintComponent> tintComponentComponentMapper;
+    protected ComponentMapper<TextureRegionComponent> textureRegionMapper;
+    protected ComponentMapper<TransformComponent> transformMapper;
+    protected ComponentMapper<DimensionsComponent> dimensionsComponentComponentMapper;
+    protected ComponentMapper<ShaderComponent> shaderComponentMapper;
 
-
-    public TexturRegionDrawLogic() {
-		tintComponentComponentMapper = ComponentMapper.getFor(TintComponent.class);
-		textureRegionMapper = ComponentMapper.getFor(TextureRegionComponent.class);
-		transformMapper = ComponentMapper.getFor(TransformComponent.class);
-		dimensionsComponentComponentMapper = ComponentMapper.getFor(DimensionsComponent.class);
-		shaderComponentMapper = ComponentMapper.getFor(ShaderComponent.class);
-	}
-
-    @Override
-    public void draw(Batch batch, Entity entity, float parentAlpha) {
-        TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
-        ShaderComponent shaderComponent = shaderComponentMapper.get(entity);
-
-        if (shaderComponentMapper.has(entity) && shaderComponent.shaderLogic != null) {
-            shaderComponent.shaderLogic.draw(batch, entity, parentAlpha);
-        } else {
-            if(entityTextureRegionComponent.polygonSprite != null) {
-                drawTiledPolygonSprite(batch, entity);
-            } else {
-                drawSprite(batch, entity, parentAlpha);
-            }
-        }
+    public ShaderLogic() {
+        tintComponentComponentMapper = ComponentMapper.getFor(TintComponent.class);
+        textureRegionMapper = ComponentMapper.getFor(TextureRegionComponent.class);
+        transformMapper = ComponentMapper.getFor(TransformComponent.class);
+        dimensionsComponentComponentMapper = ComponentMapper.getFor(DimensionsComponent.class);
+        shaderComponentMapper = ComponentMapper.getFor(ShaderComponent.class);
     }
+
+    public abstract void draw(Batch batch, Entity entity, float parentAlpha);
 
     public void drawSprite(Batch batch, Entity entity, float parentAlpha) {
         TintComponent tintComponent = tintComponentComponentMapper.get(entity);
@@ -58,6 +45,7 @@ public class TexturRegionDrawLogic implements Drawable {
     }
 
     public void drawPolygonSprite(Batch batch, Entity entity) {
+
         TintComponent tintComponent = tintComponentComponentMapper.get(entity);
         TransformComponent entityTransformComponent = transformMapper.get(entity);
         TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
@@ -72,11 +60,11 @@ public class TexturRegionDrawLogic implements Drawable {
     }
 
     public void drawTiledPolygonSprite(Batch batch, Entity entity) {
-    	batch.flush();
+        batch.flush();
         TintComponent tintComponent = tintComponentComponentMapper.get(entity);
         TransformComponent entityTransformComponent = transformMapper.get(entity);
         TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
-        
+
         DimensionsComponent dimensionsComponent = dimensionsComponentComponentMapper.get(entity);
         float ppwu = dimensionsComponent.width/entityTextureRegionComponent.region.getRegionWidth();
 
@@ -85,7 +73,7 @@ public class TexturRegionDrawLogic implements Drawable {
 
         batch.getShader().setUniformi("isRepeat", 1);
         batch.getShader().setUniformf("atlasCoord", atlasCoordsVector);
-    	batch.getShader().setUniformf("atlasSize", atlasSizeVector);
+        batch.getShader().setUniformf("atlasSize", atlasSizeVector);
         //System.out.println(entityTransformComponent.originX);
         //batch.setColor(tintComponent.color);
         entityTextureRegionComponent.polygonSprite.setColor(tintComponent.color);
@@ -96,6 +84,8 @@ public class TexturRegionDrawLogic implements Drawable {
         entityTextureRegionComponent.polygonSprite.draw((PolygonSpriteBatch) batch);
         batch.flush();
         batch.getShader().setUniformi("isRepeat", 0);
-       
+
     }
+
+
 }
