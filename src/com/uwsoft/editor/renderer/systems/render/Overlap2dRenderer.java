@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.physics.box2d.World;
 import com.uwsoft.editor.renderer.commons.IExternalItemType;
 import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
@@ -28,7 +27,7 @@ public class Overlap2dRenderer extends IteratingSystem {
 	private ComponentMapper<TransformComponent> transformMapper = ComponentMapper.getFor(TransformComponent.class);
 	private ComponentMapper<MainItemComponent> mainItemComponentMapper = ComponentMapper.getFor(MainItemComponent.class);
 	private ComponentMapper<ShaderComponent> shaderComponentComponentMapper = ComponentMapper.getFor(ShaderComponent.class);
-	
+
 	private DrawableLogicMapper drawableLogicMapper;
 	private RayHandler rayHandler;
 //	private World world;
@@ -36,7 +35,7 @@ public class Overlap2dRenderer extends IteratingSystem {
 	//private Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
 
 	public static float timeRunning = 0;
-	
+
 	public Batch batch;
 
 	public Overlap2dRenderer(Batch batch) {
@@ -76,17 +75,17 @@ public class Overlap2dRenderer extends IteratingSystem {
 
 	private void drawRecursively(Entity rootEntity, float parentAlpha) {
 
-		
+
 		//currentComposite = rootEntity;
 		CompositeTransformComponent curCompositeTransformComponent = compositeTransformMapper.get(rootEntity);
 		TransformComponent transform = transformMapper.get(rootEntity);
 		ShaderComponent shaderComponent = shaderComponentComponentMapper.get(rootEntity);
-		
+
 		boolean shaderExist = shaderComponent!=null && shaderComponent.getShader()!=null;
 		if(shaderExist){
 			batch.setShader(shaderComponent.getShader());
 		}
-		
+
 		if (curCompositeTransformComponent.transform || transform.rotation != 0 || transform.scaleX !=1 || transform.scaleY !=1){
 			MainItemComponent childMainItemComponent = mainItemComponentMapper.get(rootEntity);
 			//System.out.println(" Name " +childMainItemComponent.itemIdentifier);
@@ -101,7 +100,7 @@ public class Overlap2dRenderer extends IteratingSystem {
 		drawChildren(rootEntity, batch, curCompositeTransformComponent, parentAlpha);
 		if (curCompositeTransformComponent.transform || transform.rotation != 0 || transform.scaleX !=1 || transform.scaleY !=1)
 			resetTransform(rootEntity, batch);
-			
+
 		if(shaderExist){
 			batch.setShader(null);
 		}
@@ -126,12 +125,12 @@ public class Overlap2dRenderer extends IteratingSystem {
 				if(!childMainItemComponent.visible){
 					continue;
 				}
-				
+
 				int entityType = childMainItemComponent.entityType;
 
 				NodeComponent childNodeComponent = nodeMapper.get(child);
-				
-				
+
+
 				if(childNodeComponent ==null){
 					//Find logic from the mapper and draw it
 					drawableLogicMapper.getDrawable(entityType).draw(batch, child, parentAlpha);
@@ -143,14 +142,14 @@ public class Overlap2dRenderer extends IteratingSystem {
 		} else {
 			// No transform for this group, offset each child.
 			TransformComponent compositeTransform = transformMapper.get(rootEntity);
-			
+
 			float offsetX = compositeTransform.x, offsetY = compositeTransform.y;
-			
+
 			if(viewPortMapper.has(rootEntity)){
 				offsetX = 0;
 				offsetY = 0;
 			}
-			
+
 			for (int i = 0, n = nodeComponent.children.size; i < n; i++) {
 				Entity child = children[i];
 
@@ -170,10 +169,10 @@ public class Overlap2dRenderer extends IteratingSystem {
 				float cx = childTransformComponent.x, cy = childTransformComponent.y;
 				childTransformComponent.x = cx + offsetX;
 				childTransformComponent.y = cy + offsetY;
-				
+
 				NodeComponent childNodeComponent = nodeMapper.get(child);
 				int entityType = mainItemComponentMapper.get(child).entityType;
-				
+
 				if(childNodeComponent ==null){
 					//Find the logic from mapper and draw it
 					drawableLogicMapper.getDrawable(entityType).draw(batch, child, parentAlpha);
@@ -188,17 +187,18 @@ public class Overlap2dRenderer extends IteratingSystem {
 		nodeComponent.children.end();
 	}
 
-	/** Returns the transform for this group's coordinate system. 
+	/** Returns the transform for this group's coordinate system.
 	 * @param rootEntity */
 	protected Matrix4 computeTransform (Entity rootEntity) {
 		CompositeTransformComponent curCompositeTransformComponent = compositeTransformMapper.get(rootEntity);
+
 		//NodeComponent nodeComponent = nodeMapper.get(rootEntity);
 		ParentNodeComponent parentNodeComponent = parentNodeMapper.get(rootEntity);
 		TransformComponent curTransform = transformMapper.get(rootEntity);
 		Affine2 worldTransform = curCompositeTransformComponent.worldTransform;
-		//TODO origin thing
-		float originX = 0;
-		float originY = 0;
+
+		float originX = curTransform.originX;
+		float originY = curTransform.originY;
 		float x = curTransform.x;
 		float y = curTransform.y;
 		float rotation = curTransform.rotation;
@@ -209,18 +209,18 @@ public class Overlap2dRenderer extends IteratingSystem {
 		if (originX != 0 || originY != 0) worldTransform.translate(-originX, -originY);
 
 		// Find the first parent that transforms.
-		
+
 		CompositeTransformComponent parentTransformComponent = null;
 		//NodeComponent parentNodeComponent;
-		
+
 		Entity parentEntity = null;
 		if(parentNodeComponent != null){
 			parentEntity = parentNodeComponent.parentEntity;
 		}
 //		if (parentEntity != null){
-//			
+//
 //		}
-		
+
 //		while (parentEntity != null) {
 //			parentNodeComponent = nodeMapper.get(parentEntity);
 //			if (parentTransformComponent.transform) break;
@@ -229,7 +229,7 @@ public class Overlap2dRenderer extends IteratingSystem {
 //			parentTransformComponent = compositeTransformMapper.get(parentEntity);
 //
 //		}
-		
+
 		if (parentEntity != null){
 			parentTransformComponent = compositeTransformMapper.get(parentEntity);
 			TransformComponent transform = transformMapper.get(parentEntity);
@@ -253,7 +253,7 @@ public class Overlap2dRenderer extends IteratingSystem {
 		CompositeTransformComponent curCompositeTransformComponent = compositeTransformMapper.get(rootEntity);
 		batch.setTransformMatrix(curCompositeTransformComponent.oldTransform);
 	}
-	
+
 	public void setRayHandler(RayHandler rayHandler){
 		this.rayHandler = rayHandler;
 	}
