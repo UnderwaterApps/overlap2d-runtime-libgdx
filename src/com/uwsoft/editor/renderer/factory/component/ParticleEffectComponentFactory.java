@@ -20,6 +20,7 @@ package com.uwsoft.editor.renderer.factory.component;
 
 import box2dLight.RayHandler;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.World;
@@ -37,8 +38,8 @@ import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 public class ParticleEffectComponentFactory extends ComponentFactory {
 
 
-    public ParticleEffectComponentFactory(RayHandler rayHandler, World world, IResourceRetriever rm) {
-        super(rayHandler, world, rm);
+    public ParticleEffectComponentFactory(PooledEngine engine, RayHandler rayHandler, World world, IResourceRetriever rm) {
+        super(engine,rayHandler, world, rm);
     }
 
     @Override
@@ -51,7 +52,7 @@ public class ParticleEffectComponentFactory extends ComponentFactory {
 
     @Override
     protected DimensionsComponent createDimensionsComponent(Entity entity, MainItemVO vo) {
-        DimensionsComponent component = new DimensionsComponent();
+        DimensionsComponent component= engine.createComponent(DimensionsComponent.class);
 
         ProjectInfoVO projectInfoVO = rm.getProjectVO();
         float boundBoxSize = 70f;
@@ -62,7 +63,7 @@ public class ParticleEffectComponentFactory extends ComponentFactory {
     }
 
     protected ParticleComponent createParticleComponent(Entity entity, ParticleEffectVO vo) {
-        ParticleComponent component = new ParticleComponent();
+        ParticleComponent component = engine.createComponent(ParticleComponent.class);
         component.particleName = vo.particleName;
 		ParticleEffect particleEffect = new ParticleEffect(rm.getParticleEffect(vo.particleName));
         component.particleEffect = particleEffect;

@@ -2,9 +2,11 @@ package com.uwsoft.editor.renderer.components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.SnapshotArray;
 
-public class NodeComponent implements Component {
+public class NodeComponent implements Component,Pool.Poolable {
+
 	public SnapshotArray<Entity> children = new SnapshotArray<Entity>(true, 1, Entity.class);
 
 	public void removeChild(Entity entity) {
@@ -14,4 +16,9 @@ public class NodeComponent implements Component {
 	public void addChild(Entity entity) {
 		children.add(entity);
 	}
+
+    @Override
+    public void reset() {
+        children.clear();
+    }
 }

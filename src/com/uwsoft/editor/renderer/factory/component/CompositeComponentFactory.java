@@ -21,6 +21,7 @@ package com.uwsoft.editor.renderer.factory.component;
 import box2dLight.RayHandler;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.World;
 import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
@@ -39,8 +40,8 @@ import com.uwsoft.editor.renderer.resources.IResourceRetriever;
  */
 public class CompositeComponentFactory extends ComponentFactory {
 
-    public CompositeComponentFactory(RayHandler rayHandler, World world, IResourceRetriever rm) {
-        super(rayHandler, world, rm);
+    public CompositeComponentFactory(PooledEngine engine, RayHandler rayHandler, World world, IResourceRetriever rm) {
+        super(engine,rayHandler, world, rm);
     }
 
     @Override
@@ -56,7 +57,7 @@ public class CompositeComponentFactory extends ComponentFactory {
 
     @Override
     protected DimensionsComponent createDimensionsComponent(Entity entity, MainItemVO vo) {
-        DimensionsComponent component = new DimensionsComponent();
+        DimensionsComponent component = engine.createComponent(DimensionsComponent.class);
         component.width = ((CompositeItemVO) vo).width;
         component.height = ((CompositeItemVO) vo).height;
         component.boundBox = new Rectangle(0,0,component.width,component.height);
@@ -70,16 +71,16 @@ public class CompositeComponentFactory extends ComponentFactory {
             super.createNodeComponent(root, entity);
         }
 
-        NodeComponent node = new NodeComponent();
+        NodeComponent node = engine.createComponent(NodeComponent.class);
         entity.add(node);
     }
 
     protected void createCompositeComponents(Entity entity, CompositeItemVO vo) {
-        CompositeTransformComponent compositeTransform = new CompositeTransformComponent();
+        CompositeTransformComponent compositeTransform = engine.createComponent(CompositeTransformComponent.class);
 
         compositeTransform.automaticResize = vo.automaticResize;
 
-        LayerMapComponent layerMap = new LayerMapComponent();
+        LayerMapComponent layerMap = engine.createComponent(LayerMapComponent.class);
         if(vo.composite.layers.size() == 0) {
             vo.composite.layers.add(LayerItemVO.createDefault());
         }

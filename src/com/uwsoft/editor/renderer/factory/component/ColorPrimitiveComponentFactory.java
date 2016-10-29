@@ -20,6 +20,7 @@ package com.uwsoft.editor.renderer.factory.component;
 
 import box2dLight.RayHandler;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -40,8 +41,8 @@ import com.uwsoft.editor.renderer.utils.ComponentRetriever;
  */
 public class ColorPrimitiveComponentFactory extends ComponentFactory {
 
-    public ColorPrimitiveComponentFactory(RayHandler rayHandler, World world, IResourceRetriever rm) {
-        super(rayHandler, world, rm);
+    public ColorPrimitiveComponentFactory(PooledEngine engine,RayHandler rayHandler, World world, IResourceRetriever rm) {
+        super(engine,rayHandler, world, rm);
     }
 
     @Override
@@ -62,7 +63,7 @@ public class ColorPrimitiveComponentFactory extends ComponentFactory {
 
     @Override
     protected DimensionsComponent createDimensionsComponent(Entity entity, MainItemVO vo) {
-        DimensionsComponent component = new DimensionsComponent();
+        DimensionsComponent component = engine.createComponent(DimensionsComponent.class);
         component.setFromShape(vo.shape);
 
         entity.add(component);
@@ -71,7 +72,7 @@ public class ColorPrimitiveComponentFactory extends ComponentFactory {
     }
 
     protected TextureRegionComponent createTextureRegionComponent(Entity entity, MainItemVO vo) {
-        TextureRegionComponent component = new TextureRegionComponent();
+        TextureRegionComponent component = engine.createComponent(TextureRegionComponent.class);
 
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(Color.WHITE);

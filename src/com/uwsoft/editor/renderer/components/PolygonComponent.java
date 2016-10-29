@@ -20,11 +20,12 @@ package com.uwsoft.editor.renderer.components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Pool;
 
 /**
  * Created by azakhary on 7/2/2015.
  */
-public class PolygonComponent implements Component {
+public class PolygonComponent implements Component,Pool.Poolable {
     public Vector2[][] vertices;
 
     public void makeRectangle(float width, float height) {
@@ -48,5 +49,10 @@ public class PolygonComponent implements Component {
 
         vertices = new Vector2[1][4];
         vertices[0] = points;
+    }
+
+    @Override
+    public void reset() {
+        vertices=null;
     }
 }

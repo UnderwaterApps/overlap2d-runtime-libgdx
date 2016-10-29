@@ -21,6 +21,7 @@ package com.uwsoft.editor.renderer.factory.component;
 import box2dLight.RayHandler;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
@@ -46,8 +47,8 @@ import java.util.regex.Pattern;
  */
 public class SpriteComponentFactory extends ComponentFactory {
 
-    public SpriteComponentFactory(RayHandler rayHandler, World world, IResourceRetriever rm) {
-        super(rayHandler, world, rm);
+    public SpriteComponentFactory(PooledEngine engine,RayHandler rayHandler, World world, IResourceRetriever rm) {
+        super(engine,rayHandler, world, rm);
     }
 
     @Override
@@ -60,7 +61,7 @@ public class SpriteComponentFactory extends ComponentFactory {
 
     @Override
     protected DimensionsComponent createDimensionsComponent(Entity entity, MainItemVO vo) {
-        DimensionsComponent component = new DimensionsComponent();
+        DimensionsComponent component = engine.createComponent(DimensionsComponent.class);
 
         SpriteAnimationVO sVo = (SpriteAnimationVO) vo;
         Array<TextureAtlas.AtlasRegion> regions = getRegions(sVo.animationName);
@@ -76,7 +77,7 @@ public class SpriteComponentFactory extends ComponentFactory {
     }
 
     protected SpriteAnimationComponent createSpriteAnimationDataComponent(Entity entity, SpriteAnimationVO vo) {
-        SpriteAnimationComponent spriteAnimationComponent = new SpriteAnimationComponent();
+        SpriteAnimationComponent spriteAnimationComponent = engine.createComponent(SpriteAnimationComponent.class);
         spriteAnimationComponent.animationName = vo.animationName;
 
         spriteAnimationComponent.frameRangeMap = new HashMap<String, FrameRange>();
@@ -97,8 +98,9 @@ public class SpriteComponentFactory extends ComponentFactory {
         // filtering regions by name
         Array<TextureAtlas.AtlasRegion> regions = getRegions(spriteAnimationComponent.animationName);
 
-        AnimationComponent animationComponent = new AnimationComponent();
-        SpriteAnimationStateComponent stateComponent = new SpriteAnimationStateComponent(regions);
+        AnimationComponent animationComponent = engine.createComponent(AnimationComponent.class);
+        SpriteAnimationStateComponent stateComponent = engine.createComponent(SpriteAnimationStateComponent.class);
+        stateComponent.setRegions(regions);
 
         if(spriteAnimationComponent.frameRangeMap.isEmpty()) {
             spriteAnimationComponent.frameRangeMap.put("Default", new FrameRange("Default", 0, regions.size-1));
@@ -112,7 +114,7 @@ public class SpriteComponentFactory extends ComponentFactory {
 
         stateComponent.set(spriteAnimationComponent);
 
-        TextureRegionComponent textureRegionComponent = new TextureRegionComponent();
+        TextureRegionComponent textureRegionComponent = engine.createComponent(TextureRegionComponent.class);
         textureRegionComponent.region = regions.get(0);
         
         entity.add(textureRegionComponent);

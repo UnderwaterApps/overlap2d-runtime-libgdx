@@ -6,9 +6,10 @@ import com.badlogic.gdx.graphics.g2d.PolygonSprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.EarClippingTriangulator;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Pool;
 import com.uwsoft.editor.renderer.utils.PolygonUtils;
 
-public class TextureRegionComponent implements Component {
+public class TextureRegionComponent implements Component,Pool.Poolable {
 	public String regionName = "";
 	public TextureRegion region = null;
     public boolean isRepeat = false;
@@ -30,5 +31,14 @@ public class TextureRegionComponent implements Component {
         
         PolygonRegion polygonRegion = new PolygonRegion(region, vertices, triangles);
         polygonSprite = new PolygonSprite(polygonRegion);
+    }
+
+    @Override
+    public void reset() {
+        regionName="";
+        region=null;
+        isRepeat=false;
+        isPolygon=false;
+        polygonSprite=null;
     }
 }

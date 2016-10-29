@@ -2,6 +2,7 @@ package com.uwsoft.editor.renderer.components;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.uwsoft.editor.renderer.scripts.IScript;
@@ -11,7 +12,7 @@ import java.util.Iterator;
 /**
  * Created by azakhary on 6/19/2015.
  */
-public class ScriptComponent implements Component {
+public class ScriptComponent implements Component,Pool.Poolable {
 
     public Array<IScript> scripts = new Array<IScript>();
 
@@ -36,5 +37,10 @@ public class ScriptComponent implements Component {
                 i.remove();
             }
         }
+    }
+
+    @Override
+    public void reset() {
+        scripts.clear();
     }
 }

@@ -5,9 +5,11 @@ import java.util.Collections;
 import java.util.HashMap;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.utils.Pool;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 
-public class LayerMapComponent implements Component {
+public class LayerMapComponent implements Component,Pool.Poolable {
+
 	public boolean autoIndexing = true;
 	private ArrayList<LayerItemVO> layers = new ArrayList<LayerItemVO>();
 
@@ -72,5 +74,12 @@ public class LayerMapComponent implements Component {
 		LayerItemVO sourceVO = getLayer(source);
 		LayerItemVO targetVO = getLayer(target);
 		Collections.swap(layers, layers.indexOf(sourceVO), layers.indexOf(targetVO));
+	}
+
+	@Override
+	public void reset() {
+		autoIndexing=true;
+		layerMap.clear();
+		layers.clear();
 	}
 }

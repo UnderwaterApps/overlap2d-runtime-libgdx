@@ -3,15 +3,22 @@ package com.uwsoft.editor.renderer.components.additional;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pool;
 
 /**
  * Created by azakhary on 8/1/2015.
  */
-public class ButtonComponent implements Component {
+public class ButtonComponent implements Component,Pool.Poolable {
 
     public boolean isTouched = false;
 
     private Array<ButtonListener> listeners = new Array<ButtonListener>();
+
+    @Override
+    public void reset() {
+        isTouched=false;
+        listeners.clear();
+    }
 
     public interface ButtonListener {
         public void touchUp();
