@@ -177,6 +177,9 @@ public class PolygonUtils {
         }
 
         public Edge(Vector2 start, Vector2 end) {
+            if (start == null || end == null) {
+                throw new AssertionError("start and end must not be null");
+            }
             this.start = start;
             this.end = end;
         }
@@ -198,18 +201,42 @@ public class PolygonUtils {
         }
 
         @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (obj == null) return false;
-            if (getClass() != obj.getClass()) return false;
-            Edge other = (Edge)obj;
-            if(hashCode() == other.hashCode()) return true;
-            return false;
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Edge edge = (Edge) o;
+
+            boolean result1;
+            boolean result2;
+
+            if (!start.equals(edge.start)) {result1 = false;}
+            else {
+                result1 = end.equals(edge.end);
+            }
+
+            if (!start.equals(edge.end)) {result2 = false;}
+            else {
+                result2 = end.equals(edge.start);
+            }
+
+            return result1 || result2;
+
         }
 
         @Override
-        public int hashCode () {
-            return start.hashCode() + end.hashCode();
+        public int hashCode() {
+            int result = start.hashCode();
+            result = result + end.hashCode();
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return "Edge{" +
+                    "start=" + start +
+                    ", end=" + end +
+                    '}';
         }
     }
 

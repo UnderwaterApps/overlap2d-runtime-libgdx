@@ -42,8 +42,8 @@ public class PhysicsBodyComponent implements Component {
         awake = true;
         bullet = false;
         density = 1;
-        friction = 1;
-        restitution = 1;
+        friction = 0;
+        restitution = 0;
         filter = new Filter();
     }
 }
