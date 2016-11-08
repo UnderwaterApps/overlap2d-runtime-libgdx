@@ -27,6 +27,7 @@ import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.LayerMapComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.renderer.components.PolygonComponent;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.data.CompositeVO;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
@@ -61,6 +62,11 @@ public class CompositeComponentFactory extends ComponentFactory {
         component.height = ((CompositeItemVO) vo).height;
         component.boundBox = new Rectangle(0,0,component.width,component.height);
         entity.add(component);
+        if (vo.shape != null) {
+            PolygonComponent polygon = new PolygonComponent();
+            polygon.vertices = vo.shape.polygons;
+            component.setPolygon(polygon);
+        }
         return component;
     }
 
