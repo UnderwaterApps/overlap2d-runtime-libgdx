@@ -4,17 +4,17 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import com.esotericsoftware.spine.SkeletonRenderer;
+import com.esotericsoftware.spine.SkeletonMeshRenderer;
 import com.uwsoft.editor.renderer.systems.render.logic.Drawable;
 
 public class SpineDrawableLogic implements Drawable {
 	
 	private ComponentMapper<SpineObjectComponent> spineMapper;
-	private SkeletonRenderer skeletonRenderer;
+	private SkeletonMeshRenderer skeletonRenderer;
 	
 	public SpineDrawableLogic() {
 		spineMapper = ComponentMapper.getFor(SpineObjectComponent.class);
-		skeletonRenderer = new SkeletonRenderer();
+		skeletonRenderer = new SkeletonMeshRenderer();
 	}
 
 	@Override
