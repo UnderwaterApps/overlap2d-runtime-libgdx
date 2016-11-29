@@ -38,15 +38,10 @@ public class SpineObjectComponent implements Component {
             Slot slot = skeleton.getSlots().get(i);
             Attachment attachment = slot.getAttachment();
             if (attachment == null) continue;
-            if (!((attachment instanceof RegionAttachment) || (attachment instanceof MeshAttachment) || (attachment instanceof MeshAttachment))) continue;
+            if (!((attachment instanceof RegionAttachment) || (attachment instanceof MeshAttachment))) continue;
             float[] vertices = new float[0];
             if ((attachment instanceof RegionAttachment)) {
                 RegionAttachment region = (RegionAttachment) attachment;
-                region.updateWorldVertices(slot, false);
-                vertices = region.getWorldVertices();
-            }
-            if ((attachment instanceof MeshAttachment)) {
-                MeshAttachment region = (MeshAttachment) attachment;
                 region.updateWorldVertices(slot, false);
                 vertices = region.getWorldVertices();
             }

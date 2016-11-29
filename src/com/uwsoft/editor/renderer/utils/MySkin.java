@@ -41,8 +41,8 @@ import com.badlogic.gdx.utils.reflect.ReflectionException;
  * See the <a href="https://code.google.com/p/libgdx/wiki/Skin">documentation</a> for more.
  * @author Nathan Sweet */
 public class MySkin extends Skin {
-	ObjectMap<Class, ObjectMap<String, Object>> resources = new ObjectMap();
-	TextureAtlas atlas;
+	private ObjectMap<Class, ObjectMap<String, Object>> resources = new ObjectMap();
+	private TextureAtlas atlas;
 	public ArrayList<String>	fontFiles	=	new ArrayList<String>();
 	/** Creates an empty skin. */
 	public MySkin () {

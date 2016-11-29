@@ -11,7 +11,7 @@ public class TransformComponent implements Component {
 	public float originX;
 	public float originY;
 
-	TransformComponent backup = null;
+	private TransformComponent backup = null;
 
 	public TransformComponent() {
 
