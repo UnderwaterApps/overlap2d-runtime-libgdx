@@ -124,11 +124,15 @@ public class SpriteComponentFactory extends ComponentFactory {
     }
 
     private Array<TextureAtlas.AtlasRegion> getRegions(String filter) {
+        // At import time, it gets renamed to spritenamePack, but
+        // region.name.contains won't match spritenamePack
+        // but it will match only spriteName, so we remove it
+        String tmp = filter.replace("Pack", "");
         // filtering regions by name
         Array<TextureAtlas.AtlasRegion> allRegions = rm.getSpriteAnimation(filter).getRegions();
         Array<TextureAtlas.AtlasRegion> regions = new Array<TextureAtlas.AtlasRegion>();
         for(TextureAtlas.AtlasRegion region: allRegions) {
-            if(region.name.contains(filter)) {
+            if(region.name.contains(tmp)) {
                 regions.add(region);
             }
         }
