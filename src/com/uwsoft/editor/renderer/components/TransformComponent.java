@@ -10,6 +10,7 @@ public class TransformComponent implements Component {
 	public float rotation;
 	public float originX;
 	public float originY;
+	public boolean useOriginTransform = false;
 
 	private TransformComponent backup = null;
 
@@ -25,6 +26,7 @@ public class TransformComponent implements Component {
 		rotation = component.rotation;
 		originX = component.originX;
 		originY = component.originY;
+		useOriginTransform = component.useOriginTransform;
 	}
 
 	public void disableTransform() {
@@ -34,6 +36,7 @@ public class TransformComponent implements Component {
 		scaleX = 1f;
 		scaleY = 1f;
 		rotation = 0;
+		useOriginTransform = false;
 	}
 
 	public void enableTransform() {
@@ -45,6 +48,7 @@ public class TransformComponent implements Component {
 		rotation = backup.rotation;
 		originX = backup.originX;
 		originY = backup.originY;
+		useOriginTransform = backup.useOriginTransform;
 		backup = null;
 	}
 }
