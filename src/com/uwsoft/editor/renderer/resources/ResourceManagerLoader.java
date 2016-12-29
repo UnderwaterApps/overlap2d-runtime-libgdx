@@ -19,6 +19,8 @@ import java.util.Map;
 
 /**
  * Created by socheat on 8/13/15.
+ * @author socheat
+ * @author Evan Lindsay
  */
 public class ResourceManagerLoader extends AsynchronousAssetLoader<ResourceManager, ResourceManagerLoader.AsyncResourceManagerParam> {
 
@@ -41,7 +43,7 @@ public class ResourceManagerLoader extends AsynchronousAssetLoader<ResourceManag
             throw new GdxRuntimeException("fileName must be project.dt");
         }
 
-        FileHandle packFile = Gdx.files.internal(this.asyncResourceManager.packResolutionName + File.separator + "pack.atlas");
+        FileHandle packFile = Gdx.files.internal(this.asyncResourceManager.resolutionPath + File.separator + this.asyncResourceManager.packPath + File.separator + "pack.atlas");
         TextureAtlas textureAtlas = manager.get(packFile.path(), TextureAtlas.class);
         this.asyncResourceManager.setMainPack(textureAtlas);
         this.asyncResourceManager.loadParticleEffects();
@@ -67,7 +69,7 @@ public class ResourceManagerLoader extends AsynchronousAssetLoader<ResourceManag
 
         Array<AssetDescriptor> deps = new Array();
         {
-            FileHandle packFile = Gdx.files.internal(this.asyncResourceManager.packResolutionName + File.separator + "pack.atlas");
+            FileHandle packFile = Gdx.files.internal(this.asyncResourceManager.resolutionPath + File.separator + this.asyncResourceManager.packPath + File.separator + "pack.atlas");
             if (packFile.exists()) {
                 deps.add(new AssetDescriptor(packFile, TextureAtlas.class));
             }
@@ -79,7 +81,7 @@ public class ResourceManagerLoader extends AsynchronousAssetLoader<ResourceManag
         }
 
         for (String name : this.asyncResourceManager.getSpriteAnimNamesToLoad()) {
-            FileHandle packFile = Gdx.files.internal(this.asyncResourceManager.packResolutionName + File.separator + this.asyncResourceManager.spriteAnimationsPath + File.separator + name + File.separator + name + ".atlas");
+            FileHandle packFile = Gdx.files.internal(this.asyncResourceManager.resolutionPath + File.separator + this.asyncResourceManager.spriteAnimationsPath + File.separator + name + File.separator + name + ".atlas");
             deps.add(new AssetDescriptor(packFile, TextureAtlas.class));
         }
 
@@ -137,7 +139,7 @@ public class ResourceManagerLoader extends AsynchronousAssetLoader<ResourceManag
         }
 
         public void loadSpineAnimation(AssetManager manager, String name) {
-            FileHandle packFile = Gdx.files.internal(packResolutionName + File.separator + spineAnimationsPath + File.separator + name + File.separator + name + ".atlas");
+            FileHandle packFile = Gdx.files.internal(resolutionPath + File.separator + spineAnimationsPath + File.separator + name + File.separator + name + ".atlas");
             TextureAtlas animAtlas = manager.get(packFile.path(), TextureAtlas.class);
             skeletonAtlases.put(name, animAtlas);
             skeletonJSON.put(name, Gdx.files.internal("orig" + File.separator + spineAnimationsPath + File.separator + name + File.separator + name + ".json"));
@@ -162,7 +164,7 @@ public class ResourceManagerLoader extends AsynchronousAssetLoader<ResourceManag
             }
 
             for (String name : spriteAnimNamesToLoad) {
-                FileHandle packFile = Gdx.files.internal(packResolutionName + File.separator + spriteAnimationsPath + File.separator + name + File.separator + name + ".atlas");
+                FileHandle packFile = Gdx.files.internal(resolutionPath + File.separator + spriteAnimationsPath + File.separator + name + File.separator + name + ".atlas");
                 spriteAnimations.put(name, manager.get(packFile.path(), TextureAtlas.class));
             }
         }
