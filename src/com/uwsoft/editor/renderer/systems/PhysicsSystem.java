@@ -16,8 +16,10 @@ import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.renderer.utils.TransformMathUtils;
+import com.uwsoft.editor.renderer.physics.Contacts;
+import com.uwsoft.editor.renderer.scripts.IScript;
 
-public class PhysicsSystem extends IteratingSystem {
+public class PhysicsSystem extends IteratingSystem implements ContactListener {
 
 	protected ComponentMapper<TransformComponent> transformComponentMapper = ComponentMapper.getFor(TransformComponent.class);
 
@@ -29,6 +31,7 @@ public class PhysicsSystem extends IteratingSystem {
 	public PhysicsSystem(World world) {
 		super(Family.all(PhysicsBodyComponent.class).get());
 		this.world = world;
+		world.setContactListener(this);
 	}
 
 	@Override
@@ -97,6 +100,74 @@ public class PhysicsSystem extends IteratingSystem {
 
 	public void setPhysicsOn(boolean isPhysicsOn) {
 		this.isPhysicsOn = isPhysicsOn;
+	}
+	@Override
+	public void beginContact(Contact contact) {
+		collision_contact(contact, true);
+
+	}
+
+	@Override
+	public void endContact(Contact contact) {
+		collision_contact(contact, false);
+	}
+
+	private void collision_contact(Contact contact, boolean in) {
+		// Get both fixtures
+		Fixture f1 = contact.getFixtureA();
+		Fixture f2 = contact.getFixtureB();
+		// Get both bodies
+		Body b1 = f1.getBody();
+		Body b2 = f2.getBody();
+
+		// Get our objects that reference these bodies
+		Object o1 = b1.getUserData();
+		Object o2 = b2.getUserData();
+
+		// cast to entity
+		Entity et1 = (Entity) o1;
+		Entity et2 = (Entity) o2;
+		// get script comp
+		ScriptComponent ic1 = ComponentRetriever.get(et1, ScriptComponent.class);
+		ScriptComponent ic2 = ComponentRetriever.get(et2, ScriptComponent.class);
+
+		// cast script to contacts, if scripts implement contacts
+		for (IScript sc : ic1.scripts) {
+			try {
+				Contacts ct = (Contacts) sc;
+				if (in)
+					ct.beginContact(et2);
+				else
+					ct.endContact(et2);
+			} catch (ClassCastException exc) {
+
+			}
+
+		}
+		for (IScript sc : ic2.scripts) {
+			try {
+				Contacts ct = (Contacts) sc;
+				if (in)
+					ct.beginContact(et1);
+				else
+					ct.endContact(et1);
+			} catch (ClassCastException exc) {
+
+			}
+
+		}
+	}
+
+	@Override
+	public void preSolve(Contact contact, Manifold oldManifold) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void postSolve(Contact contact, ContactImpulse impulse) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
