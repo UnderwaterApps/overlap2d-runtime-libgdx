@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.uwsoft.editor.renderer.components.TextureRegionComponent;
 import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationComponent;
 import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationStateComponent;
@@ -26,7 +27,7 @@ public class SpriteAnimationSystem extends IteratingSystem {
 		TextureRegionComponent tex = tm.get(entity);
 		SpriteAnimationStateComponent state = sm.get(entity);
         state.currentAnimation.setFrameDuration(1f/sa.get(entity).fps);
-		tex.region = state.currentAnimation.getKeyFrame(state.time);
+		tex.region = (TextureRegion) state.currentAnimation.getKeyFrame(state.time);
 
         if(!state.paused) {
             state.time += deltaTime;
