@@ -147,7 +147,7 @@ public class SceneLoader {
         if (!customLight) {
             setAmbienceInfo(sceneVO);
         }
-		rayHandler.useCustomViewport(viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight());
+		//rayHandler.useCustomViewport(viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight());
 
 		return sceneVO;
 	}
