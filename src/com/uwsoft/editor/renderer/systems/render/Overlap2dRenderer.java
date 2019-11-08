@@ -1,21 +1,32 @@
 package com.uwsoft.editor.renderer.systems.render;
 
-import box2dLight.RayHandler;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.uwsoft.editor.renderer.commons.IExternalItemType;
-import com.uwsoft.editor.renderer.components.*;
+import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
+import com.uwsoft.editor.renderer.components.LayerMapComponent;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
+import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.renderer.components.ParentNodeComponent;
+import com.uwsoft.editor.renderer.components.ShaderComponent;
+import com.uwsoft.editor.renderer.components.TintComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.renderer.components.ViewPortComponent;
+import com.uwsoft.editor.renderer.components.ZIndexComponent;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.systems.render.logic.DrawableLogicMapper;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+
+import box2dLight.RayHandler;
 
 
 public class Overlap2dRenderer extends IteratingSystem {
@@ -54,7 +65,8 @@ public class Overlap2dRenderer extends IteratingSystem {
 		timeRunning+=deltaTime;
 
 		ViewPortComponent ViewPortComponent = viewPortMapper.get(entity);
-		Camera camera = ViewPortComponent.viewPort.getCamera();
+		Viewport viewport = ViewPortComponent.viewPort;
+		Camera camera = viewport.getCamera();
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
@@ -66,6 +78,13 @@ public class Overlap2dRenderer extends IteratingSystem {
 				rayHandler.setCulling(false);
 				OrthographicCamera orthoCamera = (OrthographicCamera) camera;
 				camera.combined.scl(1f / PhysicsBodyLoader.getScale());
+				// fix box2dlights viewport
+				int gutterW = viewport.getLeftGutterWidth();
+				int gutterH = viewport.getTopGutterHeight();
+				int rhWidth = Gdx.graphics.getWidth() - (2 * gutterW);
+				int rhHeight = Gdx.graphics.getHeight() - (2 * gutterH);
+				rayHandler.useCustomViewport(gutterW, gutterH, rhWidth, rhHeight);
+				//
 				rayHandler.setCombinedMatrix(orthoCamera);
 				rayHandler.updateAndRender();
 			}
