@@ -78,13 +78,7 @@ public class Overlap2dRenderer extends IteratingSystem {
 				rayHandler.setCulling(false);
 				OrthographicCamera orthoCamera = (OrthographicCamera) camera;
 				camera.combined.scl(1f / PhysicsBodyLoader.getScale());
-				// fix box2dlights viewport
-				int gutterW = viewport.getLeftGutterWidth();
-				int gutterH = viewport.getTopGutterHeight();
-				int rhWidth = Gdx.graphics.getWidth() - (2 * gutterW);
-				int rhHeight = Gdx.graphics.getHeight() - (2 * gutterH);
-				rayHandler.useCustomViewport(gutterW, gutterH, rhWidth, rhHeight);
-				//
+				rayHandler.useCustomViewport(viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight());
 				rayHandler.setCombinedMatrix(orthoCamera);
 				rayHandler.updateAndRender();
 			}
