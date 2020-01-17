@@ -125,14 +125,14 @@ public class SpriteComponentFactory extends ComponentFactory {
 
     private Array<TextureAtlas.AtlasRegion> getRegions(String filter) {
         // filtering regions by name
-        Array<TextureAtlas.AtlasRegion> allRegions = rm.getSpriteAnimation(filter).getRegions();
-        Array<TextureAtlas.AtlasRegion> regions = new Array<TextureAtlas.AtlasRegion>();
-        for(TextureAtlas.AtlasRegion region: allRegions) {
-            if(region.name.contains(filter)) {
-                regions.add(region);
-            }
-        }
+		Array<TextureAtlas.AtlasRegion> allRegions = rm.getSpriteAnimation(filter).getRegions();
+		Array<TextureAtlas.AtlasRegion> regions = new Array<TextureAtlas.AtlasRegion>();
+		for (TextureAtlas.AtlasRegion region : allRegions) {
+			if (filter.contains(region.name.replaceAll("\\d", ""))) {
+				regions.add(region);
+			}
+		}
 
-        return regions;
+		return allRegions;
     }
 }
