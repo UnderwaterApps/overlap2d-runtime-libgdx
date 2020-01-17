@@ -1,19 +1,19 @@
 package com.uwsoft.editor.renderer.components.sprite;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.utils.Array;
-import com.uwsoft.editor.renderer.data.FrameRange;
-
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.utils.Array;
+import com.uwsoft.editor.renderer.data.FrameRange;
+
 public class SpriteAnimationStateComponent implements Component {
     public Array<TextureAtlas.AtlasRegion> allRegions;
-	public Animation currentAnimation;
+	public Animation<TextureAtlas.AtlasRegion> currentAnimation;
 	public float time = 0.0f;
 
     public  boolean paused = false;
@@ -22,7 +22,7 @@ public class SpriteAnimationStateComponent implements Component {
         this.allRegions = sortAndGetRegions(allRegions);
     }
 	
-	public Animation get() {
+	public Animation<AtlasRegion> get() {
 		return currentAnimation;
 	}
 
@@ -35,7 +35,7 @@ public class SpriteAnimationStateComponent implements Component {
         for (int r = range.startFrame; r <= range.endFrame; r++) {
             textureRegions.add(allRegions.get(r));
         }
-        currentAnimation =  new Animation(1f/fps, textureRegions, playMode);
+        currentAnimation =  new Animation<AtlasRegion>(1f/fps, textureRegions, playMode);
         time = 0.0f;
     }
 
